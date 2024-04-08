@@ -15,7 +15,9 @@ async function uploadFile() {
     size: uploadFileElement.value.files[0].size,
     type: uploadFileElement.value.files[0].type,
   }
-  db.get('files').get('alias').put(data, (ack) => {
+
+  const index = new Date().toISOString();
+  db.get('files').get('alias').get(index).put(data, (ack) => {
     console.log('put file', ack)
   })
 }
@@ -38,7 +40,10 @@ function convertFileToBase64(file) {
 }
 
 function getFiles() {
-  console.log(db.get('alias').get('files').map())
+  db.get('files').get('alias').map().on((data, key) => {
+    console.log(key)
+    console.log(data)
+  })
   // db.get('alias').get('files', (ack) => {
   //   const blob = base64toBlob(ack.put.file_base64)
   //   downloadUrl.value = {
@@ -56,6 +61,16 @@ function base64toBlob(base64Data) {
   }
   const byteArray = new Uint8Array(byteNumbers);
   return new Blob([byteArray]);
+}
+
+function generateUUID() {
+  let dt = new Date().getTime();
+  const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    const r = (dt + Math.random()*16) % 16 | 0;
+    dt = Math.floor(dt/16);
+    return (c === 'x' ? r : (r&0x3|0x8)).toString(16);
+  });
+  return uuid;
 }
 </script>
 
