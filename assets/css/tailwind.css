@@ -16,6 +16,13 @@
         @apply max-w-[1240px] mx-auto px-4;
     }
 
+    .auth-form {
+        @apply flex flex-col gap-3
+    }
+    .auth-btn {
+        @apply text-base font-semibold
+    }
+
     .files-table {
         @apply w-full p-3
     }
