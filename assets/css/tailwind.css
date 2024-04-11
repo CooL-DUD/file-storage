@@ -10,3 +10,22 @@
         @apply h-full
     }
 }
+
+@layer components {
+    .container {
+        @apply max-w-[1240px] mx-auto px-4;
+    }
+
+    .files-table {
+        @apply w-full p-3
+    }
+    .files-table td, .files-table th {
+        @apply px-2 py-2
+    }
+    .files-table td:not(:first-child), .files-table th {
+        @apply text-center
+    }
+    .files-table tr {
+        @apply border-y border-gray-200
+    }
+}
