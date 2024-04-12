@@ -9,6 +9,10 @@
     body {
         @apply h-full
     }
+
+    h3 {
+        @apply text-2xl font-bold
+    }
 }
 
 @layer components {
@@ -17,10 +21,13 @@
     }
 
     .auth-form {
-        @apply flex flex-col gap-3
+        @apply flex flex-col gap-4 max-w-[600px] w-full
     }
     .auth-btn {
         @apply text-base font-semibold
+    }
+    .auth-redirect {
+        @apply text-blue-700 text-sm font-medium cursor-pointer w-fit
     }
 
     .files-table {

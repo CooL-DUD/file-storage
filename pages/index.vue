@@ -13,9 +13,12 @@ const userData = ref({
   password: ''
 })
 
-const form = ref({
-  type: 'login'
-})
+enum AuthForms {
+  Login = 0,
+  Register = 1
+}
+
+const formOrder = ref(AuthForms.Login)
 
 function registerUser() {
   user.create(userData.value.username, userData.value.password, (ack) => {
@@ -48,7 +51,8 @@ function loginUser() {
 </script>
 
 <template>
-  <AuthRegister/>
+  <AuthLogin v-if="formOrder === AuthForms.Login" @redirect="formOrder = AuthForms.Register"/>
+  <AuthRegister v-else-if="formOrder === AuthForms.Register" @redirect="formOrder = AuthForms.Login"/>
 
 <!--  <div v-if="form.type === 'login'" class="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">-->
 <!--    <div class="sm:mx-auto sm:w-full sm:max-w-sm">-->
