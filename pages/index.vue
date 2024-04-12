@@ -1,10 +1,5 @@
 <script setup lang="ts">
-import GUN from 'gun';
-import 'gun/sea';
-import 'gun/axe';
-
-const db = GUN()
-const user = db.user()
+const { db, user } = useGUN()
 const router = useRouter()
 const { $toast, $toastError } = useNuxtApp()
 

@@ -1,6 +1,12 @@
 <script setup lang="ts">
+import type {LoginParams} from "~/types/Auth";
 
 const emit = defineEmits(['redirect'])
+
+const userData = ref<LoginParams>({
+  username: '',
+  password: ''
+})
 
 function goToRegister(): void {
   emit('redirect')
@@ -11,11 +17,11 @@ function goToRegister(): void {
   <div class="container h-[100vh] flex flex-col gap-10 items-center justify-center">
     <h3 class="">Вход</h3>
     <form
-        @submit.prevent
+        @submit.prevent="useLogin(userData)"
         class="auth-form"
     >
-      <UIInput :label="'Почта'"/>
-      <UIInput :label="'Пароль'"/>
+      <UIInput v-model="userData.username" :label="'Почта'"/>
+      <UIInput v-model="userData.password" :label="'Пароль'"/>
 
       <p @click="goToRegister" class="auth-redirect">Ещё нет аккаунта? Зарегистрируйтесь</p>
       <UIBtn class="auth-btn">Войти</UIBtn>
