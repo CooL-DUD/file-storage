@@ -1,4 +1,4 @@
-import type {LoginParams} from "~/types/Auth";
+import type {LoginParams, RegisterParams} from "~/types/Auth";
 
 export function useLogin(data: LoginParams) {
     const { $toast, $toastError } = useNuxtApp()
@@ -16,7 +16,7 @@ export function useLogin(data: LoginParams) {
     })
 }
 
-export function useRegister(data) {
+export function useRegister(data: RegisterParams) {
     const { $toast, $toastError } = useNuxtApp()
     const router = useRouter()
     const { user } = useGUN()
