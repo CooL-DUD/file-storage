@@ -1,6 +1,5 @@
 <script setup>
-import GUN from 'gun';
-const db = GUN();
+const { db, user } = useGUN()
 
 const uploadFileElement = ref(null)
 const downloadUrl = ref({
@@ -9,6 +8,10 @@ const downloadUrl = ref({
 })
 const files = ref([])
 
+const userData = ref({
+  username: '',
+  password: ''
+})
 getFiles()
 
 async function uploadFile() {
@@ -52,7 +55,16 @@ function getFiles() {
   // })
 }
 
-
+function deleteUser() {
+  user.delete(userData.value.username, userData.value.password, (ack) => {
+    console.log(ack)
+  })
+  // const users = db.get('users')
+  //
+  // users.get(userData.value.username).put(null, (ack) => {
+  //   console.log('delete user', ack)
+  // })
+}
 </script>
 
 <template>
@@ -97,6 +109,12 @@ function getFiles() {
         </tr>
       </table>
     </div>
+
+    <form @submit.prevent="deleteUser">
+      <input type="text" v-model="userData.username">
+      <input type="password" v-model="userData.password">
+      <button>confirm</button>
+    </form>
   </div>
 </template>
 
