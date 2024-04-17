@@ -4,7 +4,7 @@ import 'gun/axe';
 
 export function useGUN() {
     const db = GUN()
-    const user = db.user()
+    const user = db.user().recall({sessionStorage: true})
 
     return { db, user }
 }

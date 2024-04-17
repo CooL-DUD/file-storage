@@ -4,6 +4,7 @@ const props = defineProps<{
   id?: string,
   type?: string,
   placeholder?: string,
+  readonly?: boolean,
 }>()
 
 const model = defineModel()
@@ -14,7 +15,7 @@ const model = defineModel()
     <label
         v-if="label"
         :for="id"
-        class="text-base font-medium"
+        class="font-medium"
     >
       {{ label }}
     </label>
@@ -24,6 +25,7 @@ const model = defineModel()
         :id="id"
         :type="type ? type : 'text'"
         :placeholder="placeholder"
+        :readonly="readonly"
         class="px-4 py-3 rounded-xl border border-gray-300"
     />
   </div>

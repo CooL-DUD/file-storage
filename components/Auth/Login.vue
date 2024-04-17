@@ -21,7 +21,7 @@ function goToRegister(): void {
         class="auth-form"
     >
       <UIInput v-model="userData.username" :label="'Почта'"/>
-      <UIInput v-model="userData.password" :label="'Пароль'"/>
+      <UIInput v-model="userData.password" :label="'Пароль'" :type="'password'"/>
 
       <p @click="goToRegister" class="auth-redirect">Ещё нет аккаунта? Зарегистрируйтесь</p>
       <UIBtn class="auth-btn">Войти</UIBtn>

@@ -21,7 +21,7 @@
     }
 
     .auth-form {
-        @apply flex flex-col gap-4 max-w-[600px] w-full
+        @apply flex flex-col gap-4 max-w-[600px] w-full text-base
     }
     .auth-btn {
         @apply text-base font-semibold

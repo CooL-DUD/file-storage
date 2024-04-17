@@ -1,135 +1,123 @@
-<script setup lang="ts">
+<script setup>
 const { db, user } = useGUN()
-const router = useRouter()
-const { $toast, $toastError } = useNuxtApp()
+
+const uploadFileElement = ref(null)
+const downloadUrl = ref({
+  url: '',
+  file_name: ''
+})
+const files = ref([])
 
 const userData = ref({
   username: '',
   password: ''
 })
+getFiles()
 
-enum AuthForms {
-  Login = 0,
-  Register = 1
-}
+async function uploadFile() {
+  const data = {
+    file_base64: await convertFileToBase64(uploadFileElement.value.files[0]),
+    file_name: uploadFileElement.value.files[0].name,
+    size: uploadFileElement.value.files[0].size,
+    type: uploadFileElement.value.files[0].type,
+  }
 
-const formOrder = ref(AuthForms.Login)
-
-function registerUser() {
-  user.create(userData.value.username, userData.value.password, (ack) => {
-    console.log('ack',ack)
-    console.log(userData.value)
-    if (ack.ok) {
-      $toast('User created successfully! Redirecting to profile page...')
-      setTimeout(() => {
-        router.push('/profile')
-      }, 3000)
-    } else if (ack.err) {
-      $toastError(ack.err)
-    }
+  const index = new Date().toISOString();
+  db.get('files').get('alias').get(index).put(data, (ack) => {
+    console.log('put file', ack)
   })
 }
 
-function loginUser() {
-  user.auth(userData.value.username, userData.value.password, (ack) => {
+
+function getFiles() {
+  console.log('get files')
+  db.get('files').get('alias').map().on((data, key) => {
+    console.log(key)
+    const blob = base64toBlob(data.file_base64)
+    let file = {
+      file_base64: data.file_base64,
+      file_name: data.file_name,
+      size: data.size,
+      type: data.type,
+      url: URL.createObjectURL(blob),
+      date: key
+    }
+    console.log(Object.keys(file).length)
+    if (Object.keys(file).length)
+      files.value.push(file);
+  })
+  // db.get('alias').get('files', (ack) => {
+  //   const blob = base64toBlob(ack.put.file_base64)
+  //   downloadUrl.value = {
+  //     url: URL.createObjectURL(blob),
+  //     file_name: ack.put.file_name,
+  //   }
+  // })
+}
+
+function deleteUser() {
+  user.delete(userData.value.username, userData.value.password, (ack) => {
     console.log(ack)
-    if (ack.err) {
-      $toastError(ack.err)
-    } else {
-      $toast('User logged in successfully! Redirecting to profile page...')
-      setTimeout(() => {
-        router.push('/profile')
-      }, 3000)
-    }
   })
+  // const users = db.get('users')
+  //
+  // users.get(userData.value.username).put(null, (ack) => {
+  //   console.log('delete user', ack)
+  // })
 }
 </script>
 
 <template>
-  <AuthLogin v-if="formOrder === AuthForms.Login" @redirect="formOrder = AuthForms.Register"/>
-  <AuthRegister v-else-if="formOrder === AuthForms.Register" @redirect="formOrder = AuthForms.Login"/>
+  <div class="container">
+    <form @submit.prevent="uploadFile">
+      <input type="file" ref="uploadFileElement"/>
+      <button>upload</button>
+    </form>
 
-<!--  <div v-if="form.type === 'login'" class="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">-->
-<!--    <div class="sm:mx-auto sm:w-full sm:max-w-sm">-->
-<!--      <img class="mx-auto h-10 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company" />-->
-<!--      <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Sign in to your account</h2>-->
-<!--    </div>-->
+    <a v-if="downloadUrl.url" :href="downloadUrl.url" :download="downloadUrl.file_name">download</a>
 
-<!--    <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">-->
-<!--      <form @submit.prevent="loginUser" class="space-y-6">-->
-<!--        <div>-->
-<!--          <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email address</label>-->
-<!--          <div class="mt-2">-->
-<!--            <input v-model="userData.username" id="email" name="email" type="email" autocomplete="email" required="" class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />-->
-<!--          </div>-->
-<!--        </div>-->
+    <div class="p-3">
+      <table class="files-table">
+        <thead>
+        <tr>
+          <th>File name</th>
+          <th>Uploaded date</th>
+          <th>File size</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="file in files" :key="file.date" class="text-sm">
+          <td class="text-base font-medium">{{ file.file_name }}</td>
+          <td>{{ formatDate(file.date) }}</td>
+          <td>{{ formatBytes(file.size) }}</td>
+          <td>
+            <a :href="file.url"
+               :download="file.file_name"
+            >download</a>
+          </td>
+        </tr>
+        </tbody>
+        <tr v-for="file in files" :key="file.date">
+          <a
+              v-if="file.url"
+              :href="file.url"
+              :download="file.file_name"
+              class="flex items-center gap-3 text-sm"
+          >
 
-<!--        <div>-->
-<!--          <div class="flex items-center justify-between">-->
-<!--            <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Password</label>-->
-<!--            <div class="text-sm">-->
-<!--              <a href="#" class="font-semibold text-indigo-600 hover:text-indigo-500">Forgot password?</a>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--          <div class="mt-2">-->
-<!--            <input v-model="userData.password" id="password" name="password" type="password" autocomplete="current-password" required="" class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />-->
-<!--          </div>-->
-<!--        </div>-->
+          </a>
+        </tr>
+      </table>
+    </div>
 
-<!--        <div>-->
-<!--          <button type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Sign in</button>-->
-<!--        </div>-->
-<!--      </form>-->
-
-<!--      <p class="mt-10 text-center text-sm text-gray-500">-->
-<!--        Don't have an account?-->
-<!--        {{ ' ' }}-->
-<!--        <p @click="form.type = 'register'" class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">Create account</p>-->
-<!--      </p>-->
-<!--    </div>-->
-<!--  </div>-->
-
-<!--  <div v-else-if="form.type === 'register'" class="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">-->
-<!--    <div class="sm:mx-auto sm:w-full sm:max-w-sm">-->
-<!--      <img class="mx-auto h-10 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company" />-->
-<!--      <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Create account</h2>-->
-<!--    </div>-->
-
-<!--    <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">-->
-<!--      <form @submit.prevent="registerUser" class="space-y-6">-->
-<!--        <div>-->
-<!--          <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email address</label>-->
-<!--          <div class="mt-2">-->
-<!--            <input v-model="userData.username" id="email" name="email" type="email" autocomplete="email" required="" class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />-->
-<!--          </div>-->
-<!--        </div>-->
-
-<!--        <div>-->
-<!--          <div class="flex items-center justify-between">-->
-<!--            <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Password</label>-->
-<!--            <div class="text-sm">-->
-<!--              <a href="#" class="font-semibold text-indigo-600 hover:text-indigo-500">Forgot password?</a>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--          <div class="mt-2">-->
-<!--            <input v-model="userData.password" id="password" name="password" type="password" autocomplete="current-password" required="" class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />-->
-<!--          </div>-->
-<!--        </div>-->
-
-<!--        <div>-->
-<!--          <button type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Sign in</button>-->
-<!--        </div>-->
-<!--      </form>-->
-
-<!--      <p class="mt-10 text-center text-sm text-gray-500">-->
-<!--        Already have account?-->
-<!--        {{ ' ' }}-->
-<!--        <p @click="form.type = 'login'" class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">Sign in</p>-->
-<!--      </p>-->
-<!--    </div>-->
-<!--  </div>-->
+    <form @submit.prevent="deleteUser">
+      <input type="text" v-model="userData.username">
+      <input type="password" v-model="userData.password">
+      <button>confirm</button>
+    </form>
+  </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 
 </style>
