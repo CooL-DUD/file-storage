@@ -28,7 +28,7 @@ function getProfile() {
       </div>
     </div>
 
-    <div v-if="profileInfo" class="container py-20 pt-[100px] flex flex-col gap-8 text-2xl">
+    <div v-if="profileInfo" class="container py-20 pt-[100px] flex flex-col gap-8 text-xl">
       <UIInput v-model="profileInfo.first_name" :label="'Ваше имя'"/>
       <UIInput v-model="profileInfo.last_name" :label="'Ваша фамилия'"/>
       <UIInput v-model="profileInfo.email" :label="'Ваша почта'"/>

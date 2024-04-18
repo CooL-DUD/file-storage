@@ -3,12 +3,11 @@
 </script>
 
 <template>
-  <div>
-    <Header/>
-    <main class="pt-[82px]">
-      <slot></slot>
-    </main>
+<div class="modal-bg">
+  <div class="modal">
+    <slot></slot>
   </div>
+</div>
 </template>
 
 <style scoped>

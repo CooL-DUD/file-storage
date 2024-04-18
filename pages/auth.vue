@@ -3,6 +3,10 @@ const { db, user } = useGUN()
 const router = useRouter()
 const { $toast, $toastError } = useNuxtApp()
 
+definePageMeta({
+  layout: 'none',
+})
+
 const userData = ref({
   username: '',
   password: ''

@@ -1,6 +1,9 @@
 <script setup>
+import {useStoreAlias} from "~/composables/store/useStoreAlias.ts";
+
 const { db, user } = useGUN()
 
+const userAlias = useStoreAlias()
 const uploadFileElement = ref(null)
 const downloadUrl = ref({
   url: '',
@@ -12,27 +15,20 @@ const userData = ref({
   username: '',
   password: ''
 })
-getFiles()
 
-async function uploadFile() {
-  const data = {
-    file_base64: await convertFileToBase64(uploadFileElement.value.files[0]),
-    file_name: uploadFileElement.value.files[0].name,
-    size: uploadFileElement.value.files[0].size,
-    type: uploadFileElement.value.files[0].type,
-  }
+const showUploadFiles = ref(false)
+onMounted(() => {
+  getFiles()
+})
 
-  const index = new Date().toISOString();
-  db.get('files').get('alias').get(index).put(data, (ack) => {
-    console.log('put file', ack)
-  })
+function handleCloseModal() {
+  showUploadFiles.value = false
+  getFiles()
 }
-
 
 function getFiles() {
   console.log('get files')
-  db.get('files').get('alias').map().on((data, key) => {
-    console.log(key)
+  db.get('files').get(userAlias.value).map().once((data, key) => {
     const blob = base64toBlob(data.file_base64)
     let file = {
       file_base64: data.file_base64,
@@ -42,39 +38,27 @@ function getFiles() {
       url: URL.createObjectURL(blob),
       date: key
     }
-    console.log(Object.keys(file).length)
     if (Object.keys(file).length)
       files.value.push(file);
   })
-  // db.get('alias').get('files', (ack) => {
-  //   const blob = base64toBlob(ack.put.file_base64)
-  //   downloadUrl.value = {
-  //     url: URL.createObjectURL(blob),
-  //     file_name: ack.put.file_name,
-  //   }
-  // })
 }
 
-function deleteUser() {
-  user.delete(userData.value.username, userData.value.password, (ack) => {
-    console.log(ack)
-  })
-  // const users = db.get('users')
-  //
-  // users.get(userData.value.username).put(null, (ack) => {
-  //   console.log('delete user', ack)
-  // })
-}
+// function deleteUser() {
+//   user.delete(userData.value.username, userData.value.password, (ack) => {
+//     console.log(ack)
+//   })
+// }
 </script>
 
 <template>
-  <div class="container">
-    <form @submit.prevent="uploadFile">
-      <input type="file" ref="uploadFileElement"/>
-      <button>upload</button>
-    </form>
+  <div class="container relative py-10">
 
-    <a v-if="downloadUrl.url" :href="downloadUrl.url" :download="downloadUrl.file_name">download</a>
+
+    <UIBtn @click="showUploadFiles = true" class="flex gap-2 items-center">
+      <Icon name="mingcute:add-line" size="24"/>
+      Add files
+    </UIBtn>
+    <FilesUploaderModal v-if="showUploadFiles" @close="handleCloseModal"/>
 
     <div class="p-3">
       <table class="files-table">
@@ -93,7 +77,10 @@ function deleteUser() {
           <td>
             <a :href="file.url"
                :download="file.file_name"
-            >download</a>
+               class="text-green-700"
+            >
+              <Icon name="lucide:download" size="24"/>
+            </a>
           </td>
         </tr>
         </tbody>
@@ -110,14 +97,13 @@ function deleteUser() {
       </table>
     </div>
 
-    <form @submit.prevent="deleteUser">
-      <input type="text" v-model="userData.username">
-      <input type="password" v-model="userData.password">
-      <button>confirm</button>
-    </form>
+<!--    <form @submit.prevent="deleteUser">-->
+<!--      <input type="text" v-model="userData.username">-->
+<!--      <input type="password" v-model="userData.password">-->
+<!--      <button>confirm</button>-->
+<!--    </form>-->
   </div>
 </template>
 
 <style lang="scss" scoped>
-
 </style>
