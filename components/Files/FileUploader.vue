@@ -4,6 +4,7 @@ import {uploadFiles} from "~/composables/useFiles";
 
 // File Management
 const { files, addFiles, removeFile } = useFileList()
+const emit = defineEmits(['uploaded'])
 
 function onInputChange(e) {
   addFiles(e.target.files)
@@ -12,6 +13,7 @@ function onInputChange(e) {
 
 async function handleUploadFiles() {
   await uploadFiles(files.value)
+  emit('uploaded')
 }
 </script>
 

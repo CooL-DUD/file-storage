@@ -3,7 +3,7 @@ import 'gun/sea';
 import 'gun/axe';
 
 export function useGUN() {
-    const db = GUN()
+    const db = GUN({localStorage: false})
     const user = db.user().recall({sessionStorage: true})
 
     return { db, user }

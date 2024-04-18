@@ -2,6 +2,7 @@
 import {useStoreAlias} from "~/composables/store/useStoreAlias.ts";
 
 const { db, user } = useGUN()
+const { $toast, $toastError } = useNuxtApp()
 
 const userAlias = useStoreAlias()
 const uploadFileElement = ref(null)
@@ -17,9 +18,8 @@ const userData = ref({
 })
 
 const showUploadFiles = ref(false)
-onMounted(() => {
-  getFiles()
-})
+
+getFiles()
 
 function handleCloseModal() {
   showUploadFiles.value = false
@@ -27,19 +27,31 @@ function handleCloseModal() {
 }
 
 function getFiles() {
-  console.log('get files')
+  files.value = []
   db.get('files').get(userAlias.value).map().once((data, key) => {
-    const blob = base64toBlob(data.file_base64)
-    let file = {
-      file_base64: data.file_base64,
-      file_name: data.file_name,
-      size: data.size,
-      type: data.type,
-      url: URL.createObjectURL(blob),
-      date: key
+    if (data) {
+      const blob = base64toBlob(data.file_base64)
+      let file = {
+        file_base64: data.file_base64,
+        file_name: data.file_name,
+        size: data.size,
+        type: data.type,
+        url: URL.createObjectURL(blob),
+        date: key
+      }
+      if (Object.keys(file).length)
+        files.value.push(file);
     }
-    if (Object.keys(file).length)
-      files.value.push(file);
+  })
+  console.log(files.value)
+}
+
+function deleteFile(file) {
+  db.get('files').get(userAlias.value).get(file.date).put(null, (ack) => {
+    if (ack.ok) {
+      $toast('File deleted successfully!')
+      getFiles()
+    }
   })
 }
 
@@ -61,7 +73,7 @@ function getFiles() {
     <FilesUploaderModal v-if="showUploadFiles" @close="handleCloseModal"/>
 
     <div class="p-3">
-      <table class="files-table">
+      <table v-if="files.length" class="files-table">
         <thead>
         <tr>
           <th>File name</th>
@@ -75,26 +87,26 @@ function getFiles() {
           <td>{{ formatDate(file.date) }}</td>
           <td>{{ formatBytes(file.size) }}</td>
           <td>
-            <a :href="file.url"
-               :download="file.file_name"
-               class="text-green-700"
-            >
-              <Icon name="lucide:download" size="24"/>
-            </a>
+            <div class="grid grid-cols-2 gap-3 justify-between">
+              <a :href="file.url"
+                 :download="file.file_name"
+                 class="text-green-700 block"
+              >
+                <Icon name="lucide:download" size="24"/>
+              </a>
+
+              <button @click="deleteFile(file)" class="text-red-700 block">
+                <Icon name="mi:delete" size="24"/>
+              </button>
+            </div>
           </td>
         </tr>
         </tbody>
-        <tr v-for="file in files" :key="file.date">
-          <a
-              v-if="file.url"
-              :href="file.url"
-              :download="file.file_name"
-              class="flex items-center gap-3 text-sm"
-          >
-
-          </a>
-        </tr>
       </table>
+
+      <div class="flex items-center justify-center text-3xl text-center" v-else>
+        No files found.
+      </div>
     </div>
 
 <!--    <form @submit.prevent="deleteUser">-->

@@ -1,6 +1,7 @@
 import {useStoreAlias} from "~/composables/store/useStoreAlias";
 
 export async function uploadFile(file) {
+    const { $toast, $toastError } = useNuxtApp()
     console.log(file)
     const { db } = useGUN()
     const userAlias = useStoreAlias()
@@ -12,8 +13,17 @@ export async function uploadFile(file) {
     }
 
     const index = new Date().toISOString();
-    db.get('files').get(userAlias.value).get(index).put(data, (ack) => {
-        console.log('put files', ack)
+    new Promise((resolve, reject) => {
+        db.get('files').get(userAlias.value).get(index).put(data, (ack) => {
+            console.log('put files', ack)
+            if (ack.err) {
+                $toastError(ack.err)
+                reject(false)
+            } else {
+                $toast('File successfully uploaded')
+                resolve(true)
+            }
+        })
     })
 }
 

@@ -1,7 +1,10 @@
 <template>
 	<component :is="tag" class="file-preview">
-		<button @click="$emit('remove', file)" class="close-icon">&times;</button>
-		<img :src="file.url" :alt="file.file.name" :title="file.file.name" />
+		<button @click="$emit('remove', file)" class="close-icon flex items-center justify-center">
+      <Icon name="majesticons:close" size="16"/>
+    </button>
+    <Icon v-if="showPlaceholder" name="solar:file-linear" size="130"/>
+		<img v-else :src="file.url" :alt="file.file.name" :title="file.file.name" @error="showPlaceholder = true" />
 
 		<span class="status-indicator loading-indicator" v-show="file.status == 'loading'">In Progress</span>
 		<span class="status-indicator success-indicator" v-show="file.status == true">Uploaded</span>
@@ -16,6 +19,8 @@ defineProps({
 })
 
 defineEmits(['remove'])
+
+const showPlaceholder = ref(false)
 </script>
 
 <style scoped lang="scss">
