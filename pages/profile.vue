@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {useStoreAlias} from "~/composables/store/useStoreAlias";
 import {useStoreIsAuth} from "../composables/store/useStoreIsAuth";
+import {useIsAuth} from "~/composables/session/useIsAuth";
 definePageMeta({
   middleware: "auth",
 })
@@ -24,6 +25,11 @@ function getProfile() {
     })
   }
 }
+
+function handleLogout() {
+  useIsAuth().setIsAuth(false);
+  useRouter().push('/auth')
+}
 </script>
 
 <template>
@@ -39,6 +45,8 @@ function getProfile() {
       <UIInput v-model="profileInfo.first_name" :label="'Ваше имя'"/>
       <UIInput v-model="profileInfo.last_name" :label="'Ваша фамилия'"/>
       <UIInput v-model="profileInfo.email" :label="'Ваша почта'"/>
+
+      <UIBtn @click="handleLogout">Выйти из системы</UIBtn>
     </div>
   </div>
 </template>
