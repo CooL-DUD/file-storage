@@ -1,6 +1,8 @@
 <script setup>
 import {useStoreAlias} from "~/composables/store/useStoreAlias.ts";
-
+definePageMeta({
+  middleware: "auth",
+})
 const { db, user } = useGUN()
 const { $toast, $toastError } = useNuxtApp()
 

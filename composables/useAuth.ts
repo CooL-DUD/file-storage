@@ -1,5 +1,6 @@
 import type {LoginParams, RegisterParams} from "~/types/Auth";
 import {useCookieAlias} from "~/composables/cookie/useCookieAlias";
+import {useIsAuth} from "~/composables/session/useIsAuth";
 
 export function useLogin(data: LoginParams, profile = null) {
     const { $toast, $toastError } = useNuxtApp()
@@ -11,6 +12,7 @@ export function useLogin(data: LoginParams, profile = null) {
             $toastError(ack.err)
         } else {
             useCookieAlias().setCookieAlias(data.username)
+            useIsAuth().setIsAuth(true)
             $toast('User logged in successfully! Redirecting to profile page...')
             setTimeout(() => {
                 router.push('/profile')
@@ -41,6 +43,7 @@ export function useRegister(data: RegisterParams) {
                     $toastError(ack.err)
                 } else {
                     $toast('User created successfully! Redirecting to profile page...')
+                    useIsAuth().setIsAuth(true)
                     setTimeout(() => {
                         router.push('/profile')
                     }, 3000)

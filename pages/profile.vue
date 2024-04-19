@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import {useStoreAlias} from "~/composables/store/useStoreAlias";
-
+import {useStoreIsAuth} from "../composables/store/useStoreIsAuth";
+definePageMeta({
+  middleware: "auth",
+})
 const { db, user } = useGUN()
 
 const profileInfo = ref(null)
@@ -9,13 +12,17 @@ const userAlias = useStoreAlias()
 getProfile()
 
 function getProfile() {
-  db.get('profile').get(userAlias.value).once((data) => {
-    profileInfo.value = {
-      email: data.email,
-      first_name: data.first_name,
-      last_name: data.last_name
-    }
-  })
+  if (userAlias.value) {
+    db.get('profile').get(userAlias.value).once((data) => {
+      if (data) {
+        profileInfo.value = {
+          email: data.email,
+          first_name: data.first_name,
+          last_name: data.last_name
+        }
+      }
+    })
+  }
 }
 </script>
 
