@@ -20,7 +20,7 @@ export async function uploadFile(file) {
                 $toastError(ack.err)
                 reject(false)
             } else {
-                $toast('File successfully uploaded')
+                $toast('Файл загружен')
                 resolve(true)
             }
         })

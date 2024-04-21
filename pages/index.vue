@@ -51,7 +51,7 @@ function getFiles() {
 function deleteFile(file) {
   db.get('files').get(userAlias.value).get(file.date).put(null, (ack) => {
     if (ack.ok) {
-      $toast('File deleted successfully!')
+      $toast('Файл успешно удален')
       getFiles()
     }
   })
@@ -70,7 +70,7 @@ function deleteFile(file) {
 
     <UIBtn @click="showUploadFiles = true" class="flex gap-2 items-center">
       <Icon name="mingcute:add-line" size="24"/>
-      Add files
+      Добавить файлы
     </UIBtn>
     <FilesUploaderModal v-if="showUploadFiles" @close="handleCloseModal"/>
 
@@ -78,9 +78,9 @@ function deleteFile(file) {
       <table v-if="files.length" class="files-table">
         <thead>
         <tr>
-          <th>File name</th>
-          <th>Uploaded date</th>
-          <th>File size</th>
+          <th>Название</th>
+          <th>Дата загрузки</th>
+          <th>Размер</th>
         </tr>
         </thead>
         <tbody>
@@ -107,7 +107,7 @@ function deleteFile(file) {
       </table>
 
       <div class="flex items-center justify-center text-3xl text-center" v-else>
-        No files found.
+        Нет файлов.
       </div>
     </div>
 

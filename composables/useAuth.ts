@@ -13,9 +13,9 @@ export function useLogin(data: LoginParams, profile = null) {
         } else {
             useCookieAlias().setCookieAlias(data.username)
             useIsAuth().setIsAuth(true)
-            $toast('User logged in successfully! Redirecting to profile page...')
+            $toast('Добро пожаловать! Переносим вас на главную страницу...')
             setTimeout(() => {
-                router.push('/profile')
+                router.push('/')
             }, 3000)
         }
     })
@@ -42,10 +42,10 @@ export function useRegister(data: RegisterParams) {
                 if (ack.err) {
                     $toastError(ack.err)
                 } else {
-                    $toast('User created successfully! Redirecting to profile page...')
+                    $toast('Добро пожаловать! Переносим вас на главную страницу...')
                     useIsAuth().setIsAuth(true)
                     setTimeout(() => {
-                        router.push('/profile')
+                        router.push('/')
                     }, 3000)
                 }
             })

@@ -22,13 +22,13 @@ async function handleUploadFiles() {
   <FilesDropZone class="drop-area" @files-dropped="addFiles" #default="{ dropZoneActive }">
     <label for="file-input">
 				<span v-if="dropZoneActive">
-					<span>Drop Them Here</span>
-					<span class="smaller">to add them</span>
+					<span>Бросьте файлы здесь</span>
+					<span class="smaller">чтобы загрузить</span>
 				</span>
       <span v-else>
-					<span>Drag Your Files Here</span>
+					<span>Перенесите файлы сюда</span>
 					<span class="smaller">
-						or <strong><em>click here</em></strong> to select files
+						или <strong><em>нажмите</em></strong> чтобы выбрать
 					</span>
 				</span>
 

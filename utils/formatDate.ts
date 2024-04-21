@@ -19,7 +19,7 @@ export function formatDate(dateString: string) {
     }
 
     // Format the date string
-    const formattedDate = `${day}${daySuffix} ${months[month]} ${year}`;
+    const formattedDate = `${day}.${month<10 ? '0' : ''}${month}.${year}`;
 
     return formattedDate;
 }
