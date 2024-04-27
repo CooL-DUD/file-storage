@@ -7,17 +7,7 @@ const { db, user } = useGUN()
 const { $toast, $toastError } = useNuxtApp()
 
 const userAlias = useStoreAlias()
-const uploadFileElement = ref(null)
-const downloadUrl = ref({
-  url: '',
-  file_name: ''
-})
 const files = ref([])
-
-const userData = ref({
-  username: '',
-  password: ''
-})
 
 const showUploadFiles = ref(false)
 
@@ -30,7 +20,9 @@ function handleCloseModal() {
 
 function getFiles() {
   files.value = []
+  console.log('getfiles', userAlias.value)
   db.get('files').get(userAlias.value).map().once((data, key) => {
+    console.log('getfiles2', data)
     if (data) {
       const blob = base64toBlob(data.file_base64)
       let file = {
@@ -110,12 +102,6 @@ function deleteFile(file) {
         Нет файлов.
       </div>
     </div>
-
-<!--    <form @submit.prevent="deleteUser">-->
-<!--      <input type="text" v-model="userData.username">-->
-<!--      <input type="password" v-model="userData.password">-->
-<!--      <button>confirm</button>-->
-<!--    </form>-->
   </div>
 </template>
 

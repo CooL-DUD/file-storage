@@ -14,7 +14,9 @@ getProfile()
 
 function getProfile() {
   if (userAlias.value) {
+    console.log('get profile', userAlias.value)
     db.get('profile').get(userAlias.value).once((data) => {
+      console.log('getting profile', data)
       if (data) {
         profileInfo.value = {
           email: data.email,

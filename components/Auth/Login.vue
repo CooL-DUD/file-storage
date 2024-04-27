@@ -4,7 +4,7 @@ import type {LoginParams} from "~/types/Auth";
 const emit = defineEmits(['redirect'])
 
 const userData = ref<LoginParams>({
-  username: '',
+  email: '',
   password: ''
 })
 
@@ -20,7 +20,7 @@ function goToRegister(): void {
         @submit.prevent="useLogin(userData)"
         class="auth-form"
     >
-      <UIInput v-model="userData.username" :label="'Почта'"/>
+      <UIInput v-model="userData.email" :label="'Почта'"/>
       <UIInput v-model="userData.password" :label="'Пароль'" :type="'password'"/>
 
       <p @click="goToRegister" class="auth-redirect">Ещё нет аккаунта? Зарегистрируйтесь</p>

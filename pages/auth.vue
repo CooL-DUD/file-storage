@@ -7,46 +7,12 @@ definePageMeta({
   layout: 'none',
 })
 
-const userData = ref({
-  username: '',
-  password: ''
-})
-
 enum AuthForms {
   Login = 0,
   Register = 1
 }
 
 const formOrder = ref(AuthForms.Login)
-
-function registerUser() {
-  user.create(userData.value.username, userData.value.password, (ack) => {
-    console.log('ack',ack)
-    console.log(userData.value)
-    if (ack.ok) {
-      $toast('User created successfully! Redirecting to profile page...')
-      setTimeout(() => {
-        router.push('/profile')
-      }, 3000)
-    } else if (ack.err) {
-      $toastError(ack.err)
-    }
-  })
-}
-
-function loginUser() {
-  user.auth(userData.value.username, userData.value.password, (ack) => {
-    console.log(ack)
-    if (ack.err) {
-      $toastError(ack.err)
-    } else {
-      $toast('User logged in successfully! Redirecting to profile page...')
-      setTimeout(() => {
-        router.push('/profile')
-      }, 3000)
-    }
-  })
-}
 </script>
 
 <template>

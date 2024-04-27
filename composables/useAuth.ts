@@ -2,29 +2,43 @@ import type {LoginParams, RegisterParams} from "~/types/Auth";
 import {useCookieAlias} from "~/composables/cookie/useCookieAlias";
 import {useIsAuth} from "~/composables/session/useIsAuth";
 
-export function useLogin(data: LoginParams, profile = null) {
+export async function useLogin(userData: LoginParams) {
     const { $toast, $toastError } = useNuxtApp()
     const router = useRouter()
     const { user } = useGUN()
-    user.auth(data.username, data.password, (ack) => {
-        console.log(ack)
-        if (ack.err) {
-            $toastError(ack.err)
-        } else {
-            useCookieAlias().setCookieAlias(data.username)
-            useIsAuth().setIsAuth(true)
-            $toast('Добро пожаловать! Переносим вас на главную страницу...')
-            setTimeout(() => {
-                router.push('/')
-            }, 3000)
+    // user.auth(data.username, data.password, (ack) => {
+    //     console.log(ack)
+    //     if (ack.err) {
+    //         $toastError(ack.err)
+    //     } else {
+    //         useCookieAlias().setCookieAlias(data.username)
+    //         useIsAuth().setIsAuth(true)
+    //         $toast('Добро пожаловать! Переносим вас на главную страницу...')
+    //         setTimeout(() => {
+    //             router.push('/')
+    //         }, 3000)
+    //     }
+    // })
+    
+    try {
+        console.log(userData)
+        const response = await $fetch('/api/auth/login', {
+            method: 'POST',
+            body: userData,
+        })
+        if (response) {
+            console.log(response)
         }
-    })
+    } catch (e) {
+        console.error(e)
+    }
 }
 
 export function useRegister(data: RegisterParams) {
     const { $toast, $toastError } = useNuxtApp()
     const router = useRouter()
     const { user, db } = useGUN()
+    console.log('register')
 
     user.create(data.username, data.password, (ack) => {
         console.log(ack)
