@@ -6,7 +6,7 @@ export function readFileAsBase64(fileName: string) {
 
         const currentModuleURL = new URL(import.meta.url);
         const currentModuleDir = path.dirname(currentModuleURL.pathname).replace('.nuxt/', '');
-        const filePath = path.resolve(currentModuleDir, '..', 'storage', 'files', fileName);
+        const filePath = path.resolve(currentModuleDir, '..', 'public', 'storage', 'files', fileName);
         // Read the file from the file system
         fs.readFile(filePath, (err, data) => {
             if (err) {

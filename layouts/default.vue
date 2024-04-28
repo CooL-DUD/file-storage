@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import {getProfile} from "~/composables/useProfile";
 
+getProfile()
 </script>
 
 <template>
