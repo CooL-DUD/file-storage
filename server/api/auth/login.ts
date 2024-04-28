@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
             role: user.role
         }
         const token = generateToken(tokenParams);
-        if (refreshExpired) {
+        if (refreshExpired.error) {
             user.refresh = generateRefresh(tokenParams);
         }
         setResponseStatus(event, 200)

@@ -89,5 +89,4 @@ export async function useRegister(userData: RegisterParams) {
     } catch (e) {
         console.error(e)
     }
-
 }

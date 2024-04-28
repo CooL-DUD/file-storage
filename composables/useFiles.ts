@@ -1,4 +1,5 @@
 import {useStoreAlias} from "~/composables/store/useStoreAlias";
+import {useHeaders} from "~/composables/session/useHeaders";
 
 export async function uploadFile(file) {
     const { $toast, $toastError } = useNuxtApp()
@@ -13,17 +14,23 @@ export async function uploadFile(file) {
     }
 
     const index = new Date().toISOString();
-    new Promise((resolve, reject) => {
-        db.get('files').get(userAlias.value).get(index).put(data, (ack) => {
-            console.log('put files', ack)
-            if (ack.err) {
-                $toastError(ack.err)
-                reject(false)
-            } else {
-                $toast('Файл загружен')
-                resolve(true)
-            }
-        })
+    // new Promise((resolve, reject) => {
+    //     db.get('files').get(userAlias.value).get(index).put(data, (ack) => {
+    //         console.log('put files', ack)
+    //         if (ack.err) {
+    //             $toastError(ack.err)
+    //             reject(false)
+    //         } else {
+    //             $toast('Файл загружен')
+    //             resolve(true)
+    //         }
+    //     })
+    // })
+
+    const response = await $fetch('/api/files', {
+        method: 'POST',
+        body: data,
+        headers: useHeaders()
     })
 }
 
