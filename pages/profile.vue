@@ -15,6 +15,7 @@ const profileInfo = useStoreProfile()
 const userAlias = useStoreAlias()
 
 const inputFile = ref(null)
+const profileBgInput = ref(null)
 
 getProfile()
 
@@ -26,17 +27,29 @@ function handleLogout() {
 function handleChangeAvatar() {
   inputFile.value.click()
 }
+function handleChangeProfileBg() {
+  profileBgInput.value.click()
+}
 
 function handleFileInputChange(event) {
-  const file = event.target.files[0]; // Get the selected file
+  const file = event.target.files[0];
   if (file) {
     const reader = new FileReader();
     reader.onload = function(event) {
-      const fileData = event.target.result; // File data (Base64 string or ArrayBuffer)
-      // Send the file data to the backend using fetch or XMLHttpRequest
-      setProfileAvatar(fileData);
+      const fileData = event.target.result;
+      setProfileAvatar(fileData)
     };
-    // Read the file as data URL (Base64 string)
+    reader.readAsDataURL(file);
+  }
+}
+function handleProfileBgInputChange(event) {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      const fileData = event.target.result;
+      setProfileBackground(fileData)
+    };
     reader.readAsDataURL(file);
   }
 }
@@ -58,12 +71,44 @@ async function setProfileAvatar(fileData) {
     console.log(e)
   }
 }
+
+async function setProfileBackground(fileData) {
+  try {
+    const response = await $fetch('/api/profile/profile_bg', {
+      method: 'POST',
+      headers: useHeaders(),
+      body: {
+        profile_bg: fileData
+      }
+    })
+
+    if (response.statusCode === 200) {
+      profileInfo.value.profile_bg = URL.createObjectURL(dataURLtoBlob(fileData))
+    }
+  } catch (e) {
+    console.log(e)
+  }
+}
 </script>
 
 <template>
   <div>
     <div class="relative h-[200px]">
-      <div class="absolute inset-0 bg-profile bg-gray-300"></div>
+      <div v-if="profileInfo?.profile_bg"
+           class="absolute inset-0 bg-profile"
+           :style="`background-image: url(${profileInfo?.profile_bg})`"
+      >
+        <button @click="handleChangeProfileBg" class="absolute right-4 bottom-[-10px] rounded-full flex items-center justify-center p-2 bg-blue-700 text-white">
+          <Icon name="mdi:edit-outline" size="24"/>
+        </button>
+      </div>
+      <div v-else
+          class="absolute inset-0 bg-profile bg-gray-300"
+      >
+        <button @click="handleChangeProfileBg" class="absolute right-4 bottom-[-10px] rounded-full flex items-center justify-center p-2 bg-blue-700 text-white">
+          <Icon name="mdi:edit-outline" size="24"/>
+        </button>
+      </div>
       <div
           class="absolute bottom-0 left-1/2
                  translate-x-[-50%] translate-y-[30%]
@@ -99,12 +144,18 @@ async function setProfileAvatar(fileData) {
         accept="image/*"
         @change="handleFileInputChange"
     >
+    <input
+        ref="profileBgInput"
+        type="file"
+        class="hidden"
+        accept="image/*"
+        @change="handleProfileBgInputChange"
+    >
   </div>
 </template>
 
 <style scoped>
 .bg-profile {
   background-size: cover;
-  filter: blur(3px);
 }
 </style>
