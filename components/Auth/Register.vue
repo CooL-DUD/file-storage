@@ -11,7 +11,7 @@ const { user } = useGUN()
 const { $toast, $toastError } = useNuxtApp()
 
 const userData = ref({
-  username: '',
+  email: '',
   first_name: '',
   last_name: '',
   password: ''
@@ -40,7 +40,7 @@ function goToLogin(): void {
     </div>
     <UIInput
         :label="'Ваша почта'"
-        v-model="userData.username"
+        v-model="userData.email"
     />
 
     <p @click="goToLogin" class="auth-redirect">Уже есть аккаунт? Войдите</p>

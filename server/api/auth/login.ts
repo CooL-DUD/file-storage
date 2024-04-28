@@ -7,30 +7,38 @@ export default defineEventHandler(async (event) => {
     const user = await db().collection("users").findOne({email: body.email});
     const passwordsMatch = await verifyPassword(body.password, user.password);
 
-    if (passwordsMatch) {
-        const refreshExpired = verifyToken(user.refresh).error
-        const token = generateToken({user_id: user._id, email: user.email, role: user.role});
-        if (refreshExpired) {
-            user.refresh = generateRefresh({user_id: user._id, email: user.email, role: user.role});
-        }
-        setResponseStatus(event, 200)
-        return {
-            token: token,
-            refresh: user.refresh
-        }
-    }
-
     if (!user) {
         setResponseStatus(event, 401)
         return {
-            error: 'invalid data'
+            error: 'invalid data',
+            status: 401
         }
     }
 
-    if (user.password !== body.password) {
+    if (passwordsMatch) {
+        const refreshExpired = verifyToken(user.refresh).error
+        const tokenParams ={
+            user_id: user._id,
+            email: user.email,
+            role: user.role
+        }
+        const token = generateToken(tokenParams);
+        if (refreshExpired) {
+            user.refresh = generateRefresh(tokenParams);
+        }
+        setResponseStatus(event, 200)
+        return {
+            data: {
+                token: token,
+                refresh: user.refresh
+            },
+            status: 200
+        }
+    } else {
         setResponseStatus(event, 401)
         return {
-            error: 'invalid data'
+            error: 'invalid data',
+            status: 401
         }
     }
 })

@@ -5,8 +5,7 @@ import 'gun/axe';
 export function useGUN() {
     const db = GUN({
         // peers: ['http://localhost:8765/gun', 'https://gun-manhattan.herokuapp.com/gun'],
-        peers: ['http://localhost:8765/gun'],
-        localStorage: false
+        peers: ['http://localhost:8765/gun']
     });
     const user = db.user().recall({sessionStorage: true})
 
