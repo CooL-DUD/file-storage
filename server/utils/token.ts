@@ -8,7 +8,7 @@ interface TokenPayload {
 }
 
 export function generateToken(payload: TokenPayload) {
-    return jwt.sign(payload, TOKEN_SECRET, { expiresIn: '1h' })
+    return jwt.sign(payload, TOKEN_SECRET, { expiresIn: '1d' })
 }
 export function generateRefresh(payload: TokenPayload) {
     return jwt.sign(payload, TOKEN_SECRET, { expiresIn: '30d' })

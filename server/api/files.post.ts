@@ -6,34 +6,45 @@ export default defineEventHandler(async (event) => {
     const token = headers?.authorization?.split(' ')[1]
     const verifiedToken = verifyToken(token)
     if (!verifiedToken.error) {
-        const fileSaved = await saveBase64ToFile(body.file_name, body.file_base64)
+        const file =  await db().collection('files').insertOne({
+            user_id: verifiedToken.data.user_id,
+            file_name: body.file_name,
+            size: body.size,
+            type: body.type,
+        })
 
-        if (fileSaved.success) {
-            const file =  await db().collection('files').insertOne({
-                user_id: verifiedToken.data.user_id,
-                file_name: body.file_name,
-                size: body.size,
-                type: body.type,
-                url: 'url to the file',
-            })
+        if (file.acknowledged) {
+            const fileSaved = await saveBase64ToFile(file.insertedId.toString(), body.file_base64)
 
-            if (file.acknowledged) {
-                setResponseStatus(event, 200)
+            if (fileSaved.success) {
 
+                const updatedFile = await db().collection('files').updateOne({
+                    _id: file.insertedId,
+                    },
+                    {
+                        $set: {
+                            url: file.insertedId.toString()
+                        }
+                    })
+
+                if (updatedFile.acknowledged) {
+                    setResponseStatus(event, 200)
+                    return {
+                        statusCode: 200
+                    }
+                }
+            } else {
                 return {
-                    statusCode: 200,
-                    body,
-                    verifiedToken
+                    statusCode: 500,
+                    error: 'error in saving file',
                 }
             }
-        } else {
-            setResponseStatus(event, 500)
-
-            return {
-                statusCode: 500,
-                error: 'cannot save file',
-                add: fileSaved
-            }
+        }
+    } else {
+        setResponseStatus(event, 401)
+        return {
+            statusCode: 401,
+            error: 'unauthorized',
         }
     }
 })
