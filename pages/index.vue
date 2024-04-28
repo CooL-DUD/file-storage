@@ -105,13 +105,15 @@ async function deleteFile(file_id) {
       <table v-if="files.length" class="files-table">
         <thead>
         <tr>
+          <th>Nº</th>
           <th>Название</th>
           <th>Дата загрузки</th>
           <th>Размер</th>
         </tr>
         </thead>
         <tbody>
-        <tr v-for="file in files" :key="file._id" class="text-sm">
+        <tr v-for="(file, index) in files" :key="file._id" class="text-sm">
+          <td>{{index + 1}}</td>
           <td class="text-base font-medium">{{ file.file_name }}</td>
           <td>{{ formatDate(file.uploaded_date) }}</td>
           <td>{{ formatBytes(file.size) }}</td>

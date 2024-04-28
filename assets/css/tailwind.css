@@ -36,8 +36,11 @@
     .files-table td, .files-table th {
         @apply px-2 py-2
     }
-    .files-table td:not(:first-child), .files-table th {
+    .files-table td, .files-table th {
         @apply text-center
+    }
+    .files-table td:nth-child(2) {
+        @apply text-left
     }
     .files-table tr {
         @apply border-y border-gray-200
