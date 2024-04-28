@@ -6,14 +6,15 @@ export async function uploadFile(file) {
     console.log(file)
     const { db } = useGUN()
     const userAlias = useStoreAlias()
+
+    const date = new Date().toISOString();
     const data = {
         file_base64: await convertFileToBase64(file),
         file_name: file.name,
         size: file.size,
         type: file.type,
+        uploaded_date: date
     }
-
-    const index = new Date().toISOString();
     // new Promise((resolve, reject) => {
     //     db.get('files').get(userAlias.value).get(index).put(data, (ack) => {
     //         console.log('put files', ack)
@@ -32,6 +33,10 @@ export async function uploadFile(file) {
         body: data,
         headers: useHeaders()
     })
+
+    if (response.statusCode === 200) {
+        $toast('Файл добавлен')
+    }
 }
 
 export function uploadFiles(files) {

@@ -11,19 +11,21 @@ export default defineEventHandler(async (event) => {
             file_name: body.file_name,
             size: body.size,
             type: body.type,
+            uploaded_date: body.uploaded_date
         })
+        const splittedFilename = body?.file_name?.split('.')
+        const fileUrl = file.insertedId.toString() + '.' + splittedFilename[splittedFilename.length - 1]
 
         if (file.acknowledged) {
-            const fileSaved = await saveBase64ToFile(file.insertedId.toString(), body.file_base64)
+            const fileSaved = await saveBase64ToFile(fileUrl, body.file_base64)
 
             if (fileSaved.success) {
-
                 const updatedFile = await db().collection('files').updateOne({
                     _id: file.insertedId,
                     },
                     {
                         $set: {
-                            url: file.insertedId.toString()
+                            url: fileUrl
                         }
                     })
 

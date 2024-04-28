@@ -1,5 +1,6 @@
 <script setup>
 import {useStoreAlias} from "~/composables/store/useStoreAlias.ts";
+import {useHeaders} from "~/composables/session/useHeaders.ts";
 definePageMeta({
   middleware: "auth",
 })
@@ -8,6 +9,8 @@ const { $toast, $toastError } = useNuxtApp()
 
 const userAlias = useStoreAlias()
 const files = ref([])
+const downloadFile = ref({})
+const downloadLink = ref(null)
 
 const showUploadFiles = ref(false)
 
@@ -18,35 +21,68 @@ function handleCloseModal() {
   getFiles()
 }
 
-function getFiles() {
+async function getFiles() {
   files.value = []
-  console.log('getfiles', userAlias.value)
-  db.get('files').get(userAlias.value).map().once((data, key) => {
-    console.log('getfiles2', data)
-    if (data) {
-      const blob = base64toBlob(data.file_base64)
-      let file = {
-        file_base64: data.file_base64,
-        file_name: data.file_name,
-        size: data.size,
-        type: data.type,
-        url: URL.createObjectURL(blob),
-        date: key
-      }
-      if (Object.keys(file).length)
-        files.value.push(file);
-    }
+  // console.log('getfiles', userAlias.value)
+  // db.get('files').get(userAlias.value).map().once((data, key) => {
+  //   console.log('getfiles2', data)
+  //   if (data) {
+  //     const blob = base64toBlob(data.file_base64)
+  //     let file = {
+  //       file_base64: data.file_base64,
+  //       file_name: data.file_name,
+  //       size: data.size,
+  //       type: data.type,
+  //       url: URL.createObjectURL(blob),
+  //       date: key
+  //     }
+  //     if (Object.keys(file).length)
+  //       files.value.push(file);
+  //   }
+  // })
+  // console.log(files.value)
+
+  const response = await $fetch('/api/files', {
+    method: 'GET',
+    headers: useHeaders()
   })
-  console.log(files.value)
+  if (response.statusCode === 200) {
+    files.value = response.data
+  }
 }
 
-function deleteFile(file) {
-  db.get('files').get(userAlias.value).get(file.date).put(null, (ack) => {
-    if (ack.ok) {
-      $toast('Файл успешно удален')
-      getFiles()
-    }
+async function handleDownloadFile(file_id) {
+  const response = await $fetch(`/api/files/${file_id}`, {
+    method: 'GET',
+    headers: useHeaders()
   })
+  if (response.statusCode === 200) {
+    downloadFile.value = {
+      url: URL.createObjectURL(base64toBlob(response.data.file_base64)),
+      file_name: response.data.file_name
+    }
+    setTimeout(() => {
+      downloadLink.value.click()
+    }, 1000)
+  }
+}
+
+async function deleteFile(file_id) {
+  // db.get('files').get(userAlias.value).get(file.date).put(null, (ack) => {
+  //   if (ack.ok) {
+  //     $toast('Файл успешно удален')
+  //     getFiles()
+  //   }
+  // })
+  const response = await $fetch(`/api/files/${file_id}`, {
+    method: 'DELETE',
+    headers: useHeaders()
+  })
+  if (response.statusCode === 200) {
+    files.value = files.value.filter(file => file._id !== file_id)
+    $toast('Файл удален')
+  }
+
 }
 
 // function deleteUser() {
@@ -65,7 +101,6 @@ function deleteFile(file) {
       Добавить файлы
     </UIBtn>
     <FilesUploaderModal v-if="showUploadFiles" @close="handleCloseModal"/>
-
     <div class="p-3">
       <table v-if="files.length" class="files-table">
         <thead>
@@ -76,20 +111,25 @@ function deleteFile(file) {
         </tr>
         </thead>
         <tbody>
-        <tr v-for="file in files" :key="file.date" class="text-sm">
+        <tr v-for="file in files" :key="file._id" class="text-sm">
           <td class="text-base font-medium">{{ file.file_name }}</td>
-          <td>{{ formatDate(file.date) }}</td>
+          <td>{{ formatDate(file.uploaded_date) }}</td>
           <td>{{ formatBytes(file.size) }}</td>
           <td>
             <div class="grid grid-cols-2 gap-3 justify-between">
-              <a :href="file.url"
-                 :download="file.file_name"
+<!--              <a :href="file.url"-->
+<!--                 :download="file.file_name"-->
+<!--                 class="text-green-700 block"-->
+<!--              >-->
+<!--                <Icon name="lucide:download" size="24"/>-->
+<!--              </a>-->
+              <button @click="handleDownloadFile(file._id)"
                  class="text-green-700 block"
               >
                 <Icon name="lucide:download" size="24"/>
-              </a>
+              </button>
 
-              <button @click="deleteFile(file)" class="text-red-700 block">
+              <button @click="deleteFile(file._id)" class="text-red-700 block">
                 <Icon name="mi:delete" size="24"/>
               </button>
             </div>
@@ -102,6 +142,8 @@ function deleteFile(file) {
         Нет файлов.
       </div>
     </div>
+
+    <a ref="downloadLink" :href="downloadFile.url" :download="downloadFile.file_name" class="hidden">download</a>
   </div>
 </template>
 
