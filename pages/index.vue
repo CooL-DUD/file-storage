@@ -85,6 +85,19 @@ async function deleteFile(file_id) {
 
 }
 
+function copyShareLink(file_id) {
+
+  const copyText = document.getElementById(`copy-${file_id}`);
+  console.log(copyText)
+
+  // Select the text field
+  copyText.select();
+  copyText.setSelectionRange(0, 99999); // For mobile devices
+
+  // Copy the text inside the text field
+  navigator.clipboard.writeText(copyText.value);
+}
+
 // function deleteUser() {
 //   user.delete(userData.value.username, userData.value.password, (ack) => {
 //     console.log(ack)
@@ -118,7 +131,7 @@ async function deleteFile(file_id) {
           <td>{{ formatDate(file.uploaded_date) }}</td>
           <td>{{ formatBytes(file.size) }}</td>
           <td>
-            <div class="grid grid-cols-2 gap-3 justify-between">
+            <div class="grid grid-cols-3 gap-3 justify-between">
 <!--              <a :href="file.url"-->
 <!--                 :download="file.file_name"-->
 <!--                 class="text-green-700 block"-->
@@ -130,11 +143,17 @@ async function deleteFile(file_id) {
               >
                 <Icon name="lucide:download" size="24"/>
               </button>
+              <button @click="copyShareLink(file._id)"
+                 class="text-blue-700 block"
+              >
+                <Icon name="ph:share" size="24"/>
+              </button>
 
               <button @click="deleteFile(file._id)" class="text-red-700 block">
                 <Icon name="mi:delete" size="24"/>
               </button>
             </div>
+            <input class="hidden" :id="`copy-${file._id}`" type="text" :value="`http://localhost:3000/storage/files/${file.url}`">
           </td>
         </tr>
         </tbody>
@@ -150,4 +169,9 @@ async function deleteFile(file_id) {
 </template>
 
 <style lang="scss" scoped>
+tbody tr:hover {
+  cursor: pointer;
+  background-color: rgba(0, 123, 255, 0.1);
+  color: rgb(29 78 216);
+}
 </style>
