@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
         if (avatarSaved.success) {
             await db().collection('users').updateOne({_id: new ObjectId(verifiedToken.data.user_id)}, {
                 $set: {
-                    profile_bg: url + avatarName,
+                    'data.profile_bg': url + avatarName,
                 }
             })
             setResponseStatus(200)

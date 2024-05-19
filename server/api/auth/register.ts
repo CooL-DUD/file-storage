@@ -1,6 +1,7 @@
 import {db} from "~/server/utils/db";
 import {hashPassword, verifyPassword} from "~/server/utils/password";
 import {generateRefresh, generateToken, verifyToken} from "~/server/utils/token";
+import {storeInBlockchain} from "~/server/utils/storeInBlockchain";
 
 export default defineEventHandler(async (event) => {
     const body = await readBody(event)
@@ -16,7 +17,7 @@ export default defineEventHandler(async (event) => {
     if (!user) {
         body.role = 'user'
         body.password = await hashPassword(body.password)
-        const newUser = await db().collection("users").insertOne(body)
+        const newUser = await db().collection("users").insertOne(storeInBlockchain(body))
 
         if (newUser.acknowledged) {
             const tokenParams = {

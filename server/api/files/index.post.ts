@@ -1,4 +1,6 @@
 import {saveBase64ToFile} from "~/server/utils/saveFiles";
+import {readBlock} from "~/server/utils/readBlock";
+import {storeInBlockchain} from "~/server/utils/storeInBlockchain";
 
 export default defineEventHandler(async (event) => {
     const body = await readBody(event)
@@ -6,13 +8,13 @@ export default defineEventHandler(async (event) => {
     const token = headers?.authorization?.split(' ')[1]
     const verifiedToken = verifyToken(token)
     if (!verifiedToken.error) {
-        const file =  await db().collection('files').insertOne({
+        const file =  await db().collection('files').insertOne(storeInBlockchain({
             user_id: verifiedToken.data.user_id,
             file_name: body.file_name,
             size: body.size,
             type: body.type,
             uploaded_date: body.uploaded_date
-        })
+        }))
         const splittedFilename = body?.file_name?.split('.')
         const fileUrl = file.insertedId.toString() + '.' + splittedFilename[splittedFilename.length - 1]
 
@@ -25,7 +27,7 @@ export default defineEventHandler(async (event) => {
                     },
                     {
                         $set: {
-                            url: fileUrl
+                            'data.url': fileUrl
                         }
                     })
 

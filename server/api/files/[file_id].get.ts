@@ -1,5 +1,6 @@
 import {ObjectId} from "mongodb";
 import {readFileAsBase64} from "~/server/utils/fileToBase64";
+import {readBlock} from "~/server/utils/readBlock";
 
 export default defineEventHandler(async (event) => {
     const headers = await getRequestHeaders(event)
@@ -7,7 +8,7 @@ export default defineEventHandler(async (event) => {
     const file_id = getRouterParam(event, 'file_id')
     const verifiedToken = verifyToken(token)
     if (!verifiedToken.error) {
-        const file =  await db().collection('files').findOne({_id: new ObjectId(file_id) })
+        const file =  readBlock(await db().collection('files').findOne({_id: new ObjectId(file_id) }))
         if (file) {
             const fileData = await readFileAsBase64(file.url)
             if (fileData.success) {

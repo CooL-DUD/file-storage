@@ -1,11 +1,12 @@
 import { ObjectId } from "mongodb";
+import {readBlock} from "~/server/utils/readBlock";
 
 export default defineEventHandler(async (event) => {
     const headers = await getRequestHeaders(event)
     const token = headers?.authorization?.split(' ')[1]
     const verifiedToken = verifyToken(token)
     if (!verifiedToken.error) {
-        const userData =  await db().collection('users').findOne({_id: new ObjectId(verifiedToken.data.user_id)})
+        const userData =  readBlock(await db().collection('users').findOne({_id: new ObjectId(verifiedToken.data.user_id)}))
 
         if (userData) {
             delete userData._id

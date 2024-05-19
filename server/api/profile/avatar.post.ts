@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
         if (avatarSaved.success) {
             await db().collection('users').updateOne({_id: new ObjectId(verifiedToken.data.user_id)}, {
                 $set: {
-                    avatar: url + avatarName,
+                    'data.avatar': url + avatarName,
                 }
             })
             setResponseStatus(200)

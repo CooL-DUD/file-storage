@@ -16,6 +16,7 @@ export class Blockchain {
         block.hash = block.getHash();
         block.mine(this.difficulty);
         this.chain.push(block);
+        return block
     }
 
     isValid() {

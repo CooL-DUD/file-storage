@@ -1,10 +1,11 @@
 import {db} from "~/server/utils/db";
 import {verifyPassword} from "~/server/utils/password";
 import {generateRefresh, generateToken, verifyToken} from "~/server/utils/token";
+import {readBlock} from "~/server/utils/readBlock";
 
 export default defineEventHandler(async (event) => {
     const body = await readBody(event)
-    const user = await db().collection("users").findOne({email: body.email});
+    const user = readBlock(await db().collection("users").findOne({email: body.email}))
     if (!user) {
         setResponseStatus(event, 401)
         return {
