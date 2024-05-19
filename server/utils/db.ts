@@ -10,7 +10,6 @@ export async function connectDB() {
 
         const users = await client.db('fs').collection('users').find().toArray();
 
-        console.log('users', users)
         users2 = users
     } catch (e) {
         console.error(e);

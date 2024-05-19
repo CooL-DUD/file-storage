@@ -5,8 +5,6 @@ import {generateRefresh, generateToken, verifyToken} from "~/server/utils/token"
 export default defineEventHandler(async (event) => {
     const body = await readBody(event)
     const user = await db().collection("users").findOne({email: body.email});
-    const passwordsMatch = await verifyPassword(body.password, user.password);
-
     if (!user) {
         setResponseStatus(event, 401)
         return {
@@ -14,6 +12,8 @@ export default defineEventHandler(async (event) => {
             status: 401
         }
     }
+
+    const passwordsMatch = await verifyPassword(body.password, user.password);
 
     if (passwordsMatch) {
         const refreshExpired = verifyToken(user.refresh).error
