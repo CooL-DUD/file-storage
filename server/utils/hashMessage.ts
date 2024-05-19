@@ -1,5 +1,11 @@
-import CryptoJS from "crypto-js";
+// import CryptoJS from "crypto-js";
+//
+// export function hashMessage(message: string): Promise<string> {
+//     return CryptoJS.SHA256(message).toString(CryptoJS.enc.Hex);
+// }
 
-export function hashMessage(message: string): Promise<string> {
-    return CryptoJS.SHA256(message).toString(CryptoJS.enc.Hex);
+import crypto from "crypto"
+
+export function hashMessage(message: string) {
+    return crypto.createHash("sha256").update(message).digest("hex")
 }
