@@ -11,8 +11,8 @@ export class Blockchain {
         return this.chain[this.chain.length - 1];
     }
 
-     addBlock(block) {
-        block.prevHash = this.getLastBlock().hash;
+     addBlock(block, prevHash) {
+        block.prevHash = prevHash;
         block.hash = block.getHash();
         block.mine(this.difficulty);
         this.chain.push(block);

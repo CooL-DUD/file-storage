@@ -8,13 +8,15 @@ export default defineEventHandler(async (event) => {
     const token = headers?.authorization?.split(' ')[1]
     const verifiedToken = verifyToken(token)
     if (!verifiedToken.error) {
+        const lastFile = await db().collection('files').findOne({}, { sort: { _id: -1 } })
         const file =  await db().collection('files').insertOne(storeInBlockchain({
             user_id: verifiedToken.data.user_id,
             file_name: body.file_name,
             size: body.size,
             type: body.type,
             uploaded_date: body.uploaded_date
-        }))
+        }, lastFile?.hash || 0))
+
         const splittedFilename = body?.file_name?.split('.')
         const fileUrl = file.insertedId.toString() + '.' + splittedFilename[splittedFilename.length - 1]
 

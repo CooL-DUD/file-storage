@@ -5,7 +5,13 @@ import {readBlock} from "~/server/utils/readBlock";
 
 export default defineEventHandler(async (event) => {
     const body = await readBody(event)
-    const user = readBlock(await db().collection("users").findOne({email: body.email}))
+    // const user = readBlock(await db().collection("users").findOne({email: body.email}))
+    // const user = await db().collection("users").findOne({blockchain[last].email: body.email})
+    const user = await db().collection("users").findOne({
+        $expr: {
+            $eq: [{ $arrayElemAt: ["$blockchain.data.email", -1] }, body.email]
+        }
+    })
     if (!user) {
         setResponseStatus(event, 401)
         return {
@@ -14,11 +20,13 @@ export default defineEventHandler(async (event) => {
         }
     }
 
-    const passwordsMatch = await verifyPassword(body.password, user.password);
+    const userData = readBlock(user.blockchain[user.blockchain.length - 1])
+
+    const passwordsMatch = await verifyPassword(body.password, userData.password);
 
     if (passwordsMatch) {
         const refreshExpired = verifyToken(user.refresh).error
-        const tokenParams ={
+        const tokenParams = {
             user_id: user._id,
             email: user.email,
             role: user.role

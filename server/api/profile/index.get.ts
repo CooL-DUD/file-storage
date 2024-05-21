@@ -6,16 +6,15 @@ export default defineEventHandler(async (event) => {
     const token = headers?.authorization?.split(' ')[1]
     const verifiedToken = verifyToken(token)
     if (!verifiedToken.error) {
-        const userData =  readBlock(await db().collection('users').findOne({_id: new ObjectId(verifiedToken.data.user_id)}))
+        const userData =  await db().collection('users').findOne({_id: new ObjectId(verifiedToken.data.user_id)})
 
         if (userData) {
-            delete userData._id
-            delete userData.token
-            delete userData.refresh
+            const lastUserData = userData.blockchain[userData.blockchain.length - 1].data
+            delete lastUserData.password
             setResponseStatus(200)
             return {
                 statusCode: 200,
-                data: userData
+                data: userData.blockchain[userData.blockchain.length - 1].data
             }
         }
 

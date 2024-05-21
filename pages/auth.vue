@@ -13,12 +13,6 @@ enum AuthForms {
 }
 
 const formOrder = ref(AuthForms.Login)
-
-onMounted(async () => {
-  const res = await $fetch('/api/auth/blockchain', {
-    method: 'GET',
-  })
-})
 </script>
 
 <template>

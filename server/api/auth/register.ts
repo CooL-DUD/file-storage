@@ -17,7 +17,9 @@ export default defineEventHandler(async (event) => {
     if (!user) {
         body.role = 'user'
         body.password = await hashPassword(body.password)
-        const newUser = await db().collection("users").insertOne(storeInBlockchain(body))
+        const newUser = await db().collection("users").insertOne({
+            blockchain: [storeInBlockchain(body, '0')]
+        })
 
         if (newUser.acknowledged) {
             const tokenParams = {

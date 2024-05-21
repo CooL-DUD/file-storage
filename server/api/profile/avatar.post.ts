@@ -13,9 +13,17 @@ export default defineEventHandler(async (event) => {
         const avatarName = verifiedToken.data.user_id.toString() + '.' + avatarExtension
         const avatarSaved = await saveAvatar(avatarName, body.avatar)
         if (avatarSaved.success) {
+            const user = await db().collection('users').findOne({_id: new ObjectId(verifiedToken.data.user_id)})
             await db().collection('users').updateOne({_id: new ObjectId(verifiedToken.data.user_id)}, {
-                $set: {
-                    'data.avatar': url + avatarName,
+                $push: {
+                    // blockchain: url + avatarName,
+                    blockchain: {
+                        ...user.blockchain[user.blockchain.length - 1],
+                        data: {
+                            ...user.blockchain[user.blockchain.length - 1].data,
+                            avatar: url + avatarName,
+                        },
+                    },
                 }
             })
             setResponseStatus(200)
