@@ -35,6 +35,19 @@ export default defineEventHandler(async (event) => {
         if (refreshExpired.error) {
             user.refresh = generateRefresh(tokenParams);
         }
+        await db().collection("users").findOneAndUpdate(
+            {
+                _id: user._id,
+            },
+            {
+                $push: {
+                    actions: {
+                        time: new Date().toISOString(),
+                        name: 'login',
+                    }
+                }
+            }
+        )
         setResponseStatus(event, 200)
         return {
             data: {

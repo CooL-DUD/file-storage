@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {useHeaders} from "~/composables/session/useHeaders";
+import {extractTimeFromISO} from "../../../utils/extractTimeFromISO";
 definePageMeta({
   middleware: "auth",
 })
@@ -7,6 +8,13 @@ const { db, user } = useGUN()
 
 const userData = ref(null)
 const files = ref([])
+const actions = ref([])
+const actionTypes = {
+  register: 'Зарегистрировался',
+  login: 'Вошел',
+  avatar: 'Добавил аватарку',
+  profile_bg: 'Добавил картинку в профиль',
+}
 
 getUserData()
 
@@ -20,6 +28,7 @@ async function getUserData() {
     if (response.statusCode === 200) {
       userData.value = response.data.user_data
       files.value = response.data.user_files
+      actions.value = response.data.actions
     }
   } catch (e) {
     console.log(e)
@@ -62,25 +71,46 @@ async function getUserData() {
         <UIInput v-model="userData.email" :label="'Почта'" :readonly="true"/>
       </div>
 
-      <h3 class="text-2xl font-semibold">Файлы</h3>
-      <table v-if="files.length" class="files-table px-5">
-        <thead>
-        <tr>
-          <th>Nº</th>
-          <th>Название</th>
-          <th>Дата загрузки</th>
-          <th>Размер</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr v-for="(file, index) in files" :key="file._id">
-          <td class="text-center">{{index + 1}}</td>
-          <td class="text-base font-medium">{{ file.file_name }}</td>
-          <td>{{ formatDate(file.uploaded_date) }}</td>
-          <td>{{ formatBytes(file.size) }}</td>
-        </tr>
-        </tbody>
-      </table>
+      <template v-if="files.length">
+        <h3 class="text-2xl font-semibold">Файлы</h3>
+        <table class="files-table px-5">
+          <thead>
+          <tr>
+            <th>Nº</th>
+            <th>Название</th>
+            <th>Дата загрузки</th>
+            <th>Размер</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr v-for="(file, index) in files" :key="file._id">
+            <td class="text-center">{{index + 1}}</td>
+            <td class="text-base font-medium">{{ file.file_name }}</td>
+            <td>{{ formatDate(file.uploaded_date) }}</td>
+            <td>{{ formatBytes(file.size) }}</td>
+          </tr>
+          </tbody>
+        </table>
+      </template>
+      <template v-if="actions.length">
+        <h3 class="text-2xl font-semibold">Действия</h3>
+        <table class="files-table px-5">
+          <thead>
+          <tr>
+            <th>Nº</th>
+            <th>Действие</th>
+            <th>Дата и время</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr v-for="(action, index) in actions">
+            <td class="text-center">{{index + 1}}</td>
+            <td class="text-base font-medium">{{ actionTypes[action.name] }}</td>
+            <td>{{ formatDate(action.time) }} {{ extractTimeFromISO(action.time) }}</td>
+          </tr>
+          </tbody>
+        </table>
+      </template>
     </div>
   </div>
 </template>

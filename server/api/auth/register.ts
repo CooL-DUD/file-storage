@@ -37,7 +37,11 @@ export default defineEventHandler(async (event) => {
                 {
                     $set: {
                         token,
-                        refresh
+                        refresh,
+                        actions: [{
+                            time: new Date().toISOString(),
+                            name: 'register',
+                        }]
                     }
                 }
             )

@@ -1,6 +1,7 @@
 import { ObjectId } from "mongodb";
 import {getFileExtensionFromBase64} from "~/server/utils/getFileExtension";
 import {saveProfileBg} from "~/server/utils/saveProfileBg";
+import {db} from "~/server/utils/db";
 
 export default defineEventHandler(async (event) => {
     const body = await readBody(event)
@@ -18,6 +19,20 @@ export default defineEventHandler(async (event) => {
                     'data.profile_bg': url + avatarName,
                 }
             })
+
+            await db().collection("users").findOneAndUpdate(
+                {
+                    _id: new ObjectId(verifiedToken.data.user_id),
+                },
+                {
+                    $push: {
+                        actions: {
+                            time: new Date().toISOString(),
+                            name: 'profile_bg',
+                        }
+                    }
+                }
+            )
             setResponseStatus(200)
             return {
                 statusCode: 200,

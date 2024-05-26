@@ -7,18 +7,20 @@ export default defineEventHandler(async (event) => {
     const verifiedToken = verifyToken(token)
     if (!verifiedToken.error) {
         const userData =  await db().collection('users').findOne({_id: new ObjectId(user_id)})
-        const userFiles =  await db().collection('files').find({user_id: user_id}).toArray()
+        const userFiles =  await db().collection('files').find({'data.user_id': user_id}).toArray()
 
         if (userData) {
-            delete userData._id
-            delete userData.token
-            delete userData.refresh
+            const lastUserData = userData.blockchain[userData.blockchain.length - 1].data
+            delete lastUserData._id
+            delete lastUserData.token
+            delete lastUserData.refresh
             setResponseStatus(200)
             return {
                 statusCode: 200,
                 data: {
-                    user_data: userData,
-                    user_files: userFiles
+                    user_data: lastUserData,
+                    user_files: userFiles.map(file => file.data),
+                    actions: userData.actions
                 }
             }
         }

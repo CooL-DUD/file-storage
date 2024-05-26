@@ -1,6 +1,7 @@
 import { ObjectId } from "mongodb";
 import {saveAvatar} from "~/server/utils/saveAvatar";
 import {getFileExtensionFromBase64} from "~/server/utils/getFileExtension";
+import {db} from "~/server/utils/db";
 
 export default defineEventHandler(async (event) => {
     const body = await readBody(event)
@@ -26,6 +27,19 @@ export default defineEventHandler(async (event) => {
                     },
                 }
             })
+            await db().collection("users").findOneAndUpdate(
+                {
+                    _id: new ObjectId(verifiedToken.data.user_id),
+                },
+                {
+                    $push: {
+                        actions: {
+                            time: new Date().toISOString(),
+                            name: 'avatar',
+                        }
+                    }
+                }
+            )
             setResponseStatus(200)
             return {
                 statusCode: 200,
