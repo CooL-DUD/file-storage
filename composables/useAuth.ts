@@ -7,7 +7,7 @@ import {useCookieRefresh} from "~/composables/cookie/useCookieRefresh";
 export async function useLogin(userData: LoginParams) {
     const { $toast, $toastError } = useNuxtApp()
     const router = useRouter()
-    const { user } = useGUN()
+    // const { user } = useGUN()
     // user.auth(data.username, data.password, (ack) => {
     //     console.log(ack)
     //     if (ack.err) {
@@ -44,7 +44,7 @@ export async function useLogin(userData: LoginParams) {
 export async function useRegister(userData: RegisterParams) {
     const { $toast, $toastError } = useNuxtApp()
     const router = useRouter()
-    const { user, db } = useGUN()
+    // const { user, db } = useGUN()
 
     // user.create(data.username, data.password, (ack) => {
     //     console.log(ack)

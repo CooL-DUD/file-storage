@@ -4,7 +4,7 @@ import {useHeaders} from "~/composables/session/useHeaders";
 export async function uploadFile(file) {
     const { $toast, $toastError } = useNuxtApp()
     console.log(file)
-    const { db } = useGUN()
+    // const { db } = useGUN()
     const userAlias = useStoreAlias()
 
     const date = new Date().toISOString();

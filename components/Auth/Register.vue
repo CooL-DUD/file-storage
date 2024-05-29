@@ -7,7 +7,7 @@ const formStage = ref(FormStages.userData)
 
 const emit = defineEmits(['redirect'])
 const router = useRouter()
-const { user } = useGUN()
+// const { user } = useGUN()
 const { $toast, $toastError } = useNuxtApp()
 
 const userData = ref({

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { db, user } = useGUN()
+// const { db, user } = useGUN()
 const router = useRouter()
 const { $toast, $toastError } = useNuxtApp()
 

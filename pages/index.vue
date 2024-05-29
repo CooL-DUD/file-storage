@@ -4,7 +4,7 @@ import {useHeaders} from "~/composables/session/useHeaders.ts";
 definePageMeta({
   middleware: "auth",
 })
-const { db, user } = useGUN()
+// const { db, user } = useGUN()
 const { $toast, $toastError } = useNuxtApp()
 
 const userAlias = useStoreAlias()

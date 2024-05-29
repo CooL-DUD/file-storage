@@ -9,7 +9,7 @@ import {useStoreProfile} from "~/composables/store/useStoreProfile";
 definePageMeta({
   middleware: "auth",
 })
-const { db, user } = useGUN()
+// const { db, user } = useGUN()
 
 const profileInfo = useStoreProfile()
 const userAlias = useStoreAlias()

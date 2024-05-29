@@ -4,7 +4,7 @@ import {extractTimeFromISO} from "../../../utils/extractTimeFromISO";
 definePageMeta({
   middleware: "auth",
 })
-const { db, user } = useGUN()
+// const { db, user } = useGUN()
 
 const userData = ref(null)
 const files = ref([])
