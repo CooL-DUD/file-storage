@@ -8,5 +8,5 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
-  modules: ['nuxt-icon', '@nuxtjs/dotenv']
+  modules: ['nuxt-icon']
 })
