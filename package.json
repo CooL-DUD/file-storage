@@ -12,6 +12,7 @@
     "start": "node .output/server/index.mjs"
   },
   "dependencies": {
+    "@nuxtjs/dotenv": "^1.4.2",
     "bcrypt": "^5.1.1",
     "crypto": "^1.0.1",
     "crypto-js": "^4.2.0",
