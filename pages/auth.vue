@@ -6,7 +6,7 @@ const { $toast, $toastError } = useNuxtApp()
 definePageMeta({
   layout: 'none',
 })
-
+//something
 enum AuthForms {
   Login = 0,
   Register = 1
