@@ -9,8 +9,7 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "start": "node .output/server/index.mjs",
-    "deploy": "pm2 deploy ecosystem.config.cjs production"
+    "start": "node .output/server/index.mjs"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
