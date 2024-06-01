@@ -10,7 +10,7 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "start": "node .output/server/index.mjs",
-    "deploy": "pm2 deploy ecosystem.config.js production"
+    "deploy": "pm2 deploy ecosystem.config.cjs production"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",

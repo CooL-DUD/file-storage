@@ -17,7 +17,7 @@ module.exports = {
             repo: 'git@github.com:CooL-DUD/file-storage.git',
             ssh_options: ['ForwardAgent=yes'],
             path: '/var/www/file-sandyq',
-            'post-deploy' : 'npm install && npm run build && pm2 startOrRestart ecosystem.config.js --env production'
+            'post-deploy' : 'npm install && npm run build && pm2 startOrRestart ecosystem.config.cjs --env production'
         }
     }
 }
