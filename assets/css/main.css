@@ -62,3 +62,8 @@ body.dark-mode .secondary-gray-bg {
 body.dark-mode .secondary-light-gray-bg {
     background: #9ca3af;
 }
+
+button.closeButton--XJSTV18 {
+    display: none !important;
+    pointer-events: none !important;
+}

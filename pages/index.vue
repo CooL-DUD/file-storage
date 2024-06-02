@@ -107,19 +107,6 @@ function copyShareLink(file_id) {
 
 <template>
   <div class="container relative py-10">
-
-<!--    <l-trefoil-->
-<!--        size="40"-->
-<!--        stroke="4"-->
-<!--        stroke-length="0.15"-->
-<!--        bg-opacity="0.1"-->
-<!--        speed="1.4"-->
-<!--        color="black"-->
-<!--    ></l-trefoil>-->
-
-<!--    <div class="visme_d" data-title="Untitled Project" data-url="rx9976jz-untitled-project?fullPage=true" data-domain="forms" data-full-page="true" data-min-height="100vh" data-form-id="72806"></div>-->
-
-
     <UIBtn @click="showUploadFiles = true" class="flex gap-2 items-center">
       <Icon name="mingcute:add-line" size="24"/>
       Добавить файлы

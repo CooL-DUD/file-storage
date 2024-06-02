@@ -16,6 +16,10 @@ const profile = useStoreProfile()
       <nuxt-link v-if="profile?.role === 'admin'" to="/admin/users" class="font-medium">
         Админ панель
       </nuxt-link>
+
+      <nuxt-link to="/contact-us">
+        Контакты
+      </nuxt-link>
     </div>
 <!--    <div>search</div>-->
     <div class="flex items-center gap-4 h-[50px]">

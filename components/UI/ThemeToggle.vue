@@ -14,7 +14,6 @@ onMounted(() => {
   isDark.value = getSystemAppearance()
 })
 watch(isDark, (val) => {
-  console.log('kekee', val)
   if (val) {
     document.body.classList.add('dark-mode')
   } else {
