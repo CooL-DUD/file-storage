@@ -5,7 +5,7 @@ const profile = useStoreProfile()
 </script>
 
 <template>
-<header class="flex gap-4 items-center fixed top-0 left-0 right-0 w-full z-50 p-4 bg-blue-700 text-white">
+<header class="flex gap-4 items-center fixed top-0 left-0 right-0 w-full z-50 p-4 primary-bg text-white">
   <div class="container flex justify-between items-center gap-6">
     <div class="flex items-center gap-4">
       <nuxt-link to="/">

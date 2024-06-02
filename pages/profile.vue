@@ -98,14 +98,14 @@ async function setProfileBackground(fileData) {
            class="absolute inset-0 bg-profile"
            :style="`background-image: url(${profileInfo?.profile_bg})`"
       >
-        <button @click="handleChangeProfileBg" class="absolute right-4 bottom-[-10px] rounded-full flex items-center justify-center p-2 bg-blue-700 text-white">
+        <button @click="handleChangeProfileBg" class="absolute right-4 bottom-[-10px] rounded-full flex items-center justify-center p-2 primary-bg text-white">
           <Icon name="mdi:edit-outline" size="24"/>
         </button>
       </div>
       <div v-else
           class="absolute inset-0 bg-profile bg-gray-300"
       >
-        <button @click="handleChangeProfileBg" class="absolute right-4 bottom-[-10px] rounded-full flex items-center justify-center p-2 bg-blue-700 text-white">
+        <button @click="handleChangeProfileBg" class="absolute right-4 bottom-[-10px] rounded-full flex items-center justify-center p-2 primary-bg text-white">
           <Icon name="mdi:edit-outline" size="24"/>
         </button>
       </div>
@@ -123,7 +123,7 @@ async function setProfileBackground(fileData) {
         </div>
         <Icon v-else name="iconamoon:profile-fill" size="180"/>
 
-        <button @click="handleChangeAvatar" class="absolute right-4 bottom-0 rounded-full flex items-center justify-center p-2 bg-blue-700 text-white">
+        <button @click="handleChangeAvatar" class="absolute right-4 bottom-0 rounded-full flex items-center justify-center p-2 primary-bg text-white">
           <Icon name="mdi:edit-outline" size="24"/>
         </button>
       </div>

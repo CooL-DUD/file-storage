@@ -48,7 +48,7 @@ async function handleUploadFiles() {
   </UIBtn>
 
   <Transition>
-    <div v-if="filesLoading" class="bg-white fixed inset-0 flex items-center justify-center">
+    <div v-if="filesLoading" class="white-bg fixed inset-0 flex items-center justify-center">
       <UILoaderSections class="w-[300px]"/>
     </div>
   </Transition>

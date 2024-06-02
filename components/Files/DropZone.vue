@@ -1,5 +1,5 @@
 <template>
-	<div class="bg-gray-100" :data-active="active" @dragenter.prevent="setActive" @dragover.prevent="setActive" @dragleave.prevent="setInactive" @drop.prevent="onDrop">
+	<div class="secondary-light-gray-bg" :data-active="active" @dragenter.prevent="setActive" @dragover.prevent="setActive" @dragleave.prevent="setInactive" @drop.prevent="onDrop">
     <div class="block mx-auto mb-4 w-fit">
       <Icon name="lets-icons:upload" size="50"/>
     </div>

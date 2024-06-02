@@ -155,7 +155,7 @@ function copyShareLink(file_id) {
                 <Icon name="lucide:download" size="24"/>
               </button>
               <button @click="copyShareLink(file._id)"
-                 class="text-blue-700 block"
+                 class="primary-color block"
               >
                 <Icon name="ph:share" size="24"/>
               </button>

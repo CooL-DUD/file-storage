@@ -1,2 +1,55 @@
 @import "tailwind.css";
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
+body {
+    height: unset;
+    min-height: 100vh;
+}
+.primary-color {
+    color: #1d4ed8;
+}
+.primary-bg {
+    background: #1d4ed8;
+}
+.secondary-gray-bg {
+    background: #374151;
+}
+.secondary-light-gray-bg {
+    background: #f3f4f6;
+}
+.white-bg {
+    background: #fff;
+}
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #1e293b;
+        color: white;
+    }
+    .white-bg {
+        background-color: #1e293b;
+    }
+
+    .primary-color {
+        color: #0f172a;
+    }
+    .primary-bg {
+        background: #0f172a;
+    }
+    .secondary-gray-bg {
+        background: #4b5563;
+    }
+    .secondary-light-gray-bg {
+        background: #9ca3af;
+    }
+}
+
+.dark-mode {
+    background-color: #1e293b;
+    color: white;
+}
+
+body.dark-mode .primary-color {
+    color: #0f172a;
+}
+body.dark-mode .primary-bg {
+    background: #0f172a;
+}
