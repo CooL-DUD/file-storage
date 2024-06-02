@@ -1,5 +1,6 @@
 <script setup lang="ts">
 // const { db, user } = useGUN()
+import video from "../assets/videos/space.MP4"
 const router = useRouter()
 const { $toast, $toastError } = useNuxtApp()
 
@@ -18,7 +19,7 @@ const formOrder = ref(AuthForms.Login)
 <template>
   <div class="bg-black bg-opacity-35 text-white">
     <video id="video-background" autoplay muted Loop>
-      <source src="../assets/videos/space.MP4" type="video/mp4">
+      <source :src="video" type="video/mp4">
     </video>
     <AuthLogin v-if="formOrder === AuthForms.Login" @redirect="formOrder = AuthForms.Register"/>
     <AuthRegister v-else-if="formOrder === AuthForms.Register" @redirect="formOrder = AuthForms.Login"/>
