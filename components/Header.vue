@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {useStoreProfile} from "~/composables/store/useStoreProfile";
+import ThemeToggle from "~/components/UI/ThemeToggle.vue";
 
 const profile = useStoreProfile()
 </script>
@@ -17,13 +18,16 @@ const profile = useStoreProfile()
       </nuxt-link>
     </div>
 <!--    <div>search</div>-->
-    <nuxt-link to="/profile" class="flex items-center justify-center h-[50px] w-[50px] overflow-hidden rounded-full bg-gray-400">
-      <div v-if="profile?.avatar" class="rounded-full overflow-hidden w-full h-full">
-        <img :src="profile.avatar" alt="avatar">
-      </div>
-      <Icon v-else name="iconamoon:profile-fill" size="40"/>
+    <div class="flex items-center gap-4 h-[50px]">
+      <ThemeToggle class="text-[10px]"/>
+      <nuxt-link to="/profile" class="flex items-center justify-center h-[50px] w-[50px] overflow-hidden rounded-full bg-gray-400">
+        <div v-if="profile?.avatar" class="rounded-full overflow-hidden w-full h-full">
+          <img :src="profile.avatar" alt="avatar">
+        </div>
+        <Icon v-else name="iconamoon:profile-fill" size="40"/>
 
-    </nuxt-link>
+      </nuxt-link>
+    </div>
   </div>
 </header>
 </template>

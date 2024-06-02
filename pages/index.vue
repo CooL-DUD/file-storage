@@ -117,7 +117,7 @@ function copyShareLink(file_id) {
 <!--        color="black"-->
 <!--    ></l-trefoil>-->
 
-<!--    <div class="visme_d" data-title="Untitled Project" data-url="vdnnn4yj-untitled-project?fullPage=true" data-domain="forms" data-full-page="true" data-min-height="100vh" data-form-id="72732"></div>-->
+<!--    <div class="visme_d" data-title="Untitled Project" data-url="rx9976jz-untitled-project?fullPage=true" data-domain="forms" data-full-page="true" data-min-height="100vh" data-form-id="72806"></div>-->
 
 
     <UIBtn @click="showUploadFiles = true" class="flex gap-2 items-center">
@@ -150,17 +150,17 @@ function copyShareLink(file_id) {
 <!--                <Icon name="lucide:download" size="24"/>-->
 <!--              </a>-->
               <button @click="handleDownloadFile(file._id)"
-                 class="text-green-700 block"
+                 class="text-green-500 block"
               >
                 <Icon name="lucide:download" size="24"/>
               </button>
               <button @click="copyShareLink(file._id)"
-                 class="primary-color block"
+                 class="text-blue-500 block"
               >
                 <Icon name="ph:share" size="24"/>
               </button>
 
-              <button @click="deleteFile(file._id)" class="text-red-700 block">
+              <button @click="deleteFile(file._id)" class="text-red-500 block">
                 <Icon name="mi:delete" size="24"/>
               </button>
             </div>
@@ -183,6 +183,6 @@ function copyShareLink(file_id) {
 tbody tr:hover {
   cursor: pointer;
   background-color: rgba(0, 123, 255, 0.1);
-  color: rgb(29 78 216);
+  color: #3b82f6;
 }
 </style>
