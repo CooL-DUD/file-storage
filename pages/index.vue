@@ -151,7 +151,7 @@ function copyShareLink(file_id) {
                 <Icon name="mi:delete" size="24"/>
               </button>
             </div>
-            <input class="hidden" :id="`copy-${file._id}`" type="text" :value="`http://localhost:3000/storage/files/${file.url}`">
+            <input class="hidden" :id="`copy-${file._id}`" type="text" :value="`http://file-sandyq.kz/storage/files/${file.url}`">
           </td>
         </tr>
         </tbody>

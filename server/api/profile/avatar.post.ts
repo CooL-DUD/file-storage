@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
     const headers = await getRequestHeaders(event)
     const token = headers?.authorization?.split(' ')[1]
     const verifiedToken = verifyToken(token)
-    const url = 'http://localhost:3000/storage/avatars/';
+    const url = 'http://file-sandyq.kz/storage/avatars/';
     if (!verifiedToken.error) {
         const avatarExtension = getFileExtensionFromBase64(body.avatar)
         const avatarName = verifiedToken.data.user_id.toString() + '.' + avatarExtension
