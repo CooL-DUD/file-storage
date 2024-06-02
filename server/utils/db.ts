@@ -1,6 +1,6 @@
 import {MongoClient} from "mongodb";
 
-const client = new MongoClient('mongodb+srv://ganinurgazy03:ganinurgazy03@diploma.pmpdkpl.mongodb.net/')
+const client = new MongoClient('mongodb+srv://server:34axbm68@diploma.pmpdkpl.mongodb.net/')
 let users2
 export async function connectDB() {
     try {
