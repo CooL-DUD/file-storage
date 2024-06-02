@@ -1,5 +1,6 @@
 import {useStoreAlias} from "~/composables/store/useStoreAlias";
 import {useHeaders} from "~/composables/session/useHeaders";
+import {useStoreFilesLoading} from "~/composables/store/useStoreFilesLoading";
 
 export async function uploadFile(file) {
     const { $toast, $toastError } = useNuxtApp()
@@ -41,5 +42,7 @@ export async function uploadFile(file) {
 
 export function uploadFiles(files) {
     console.log(files)
-    return Promise.all(files.map((file) => uploadFile(file.file)))
+    return Promise.all(files.map((file) => uploadFile(file.file))).then(() => {
+        useStoreFilesLoading().value = false
+    })
 }

@@ -27,7 +27,7 @@
         @apply text-base font-semibold
     }
     .auth-redirect {
-        @apply text-blue-700 text-sm font-medium cursor-pointer w-fit
+        @apply text-white text-sm font-medium cursor-pointer w-fit
     }
 
     .files-table {

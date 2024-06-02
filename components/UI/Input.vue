@@ -26,7 +26,7 @@ const model = defineModel()
         :type="type ? type : 'text'"
         :placeholder="placeholder"
         :readonly="readonly"
-        class="px-4 py-3 rounded-xl border border-gray-300"
+        class="px-4 py-3 rounded-xl border border-gray-300 text-black"
     />
   </div>
 </template>

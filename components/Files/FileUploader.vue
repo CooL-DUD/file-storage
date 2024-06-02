@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import useFileList from "~/composables/files/useFileList";
 import {uploadFiles} from "~/composables/useFiles";
+import {useStoreFilesLoading} from "~/composables/store/useStoreFilesLoading";
 
 // File Management
 const { files, addFiles, removeFile } = useFileList()
 const emit = defineEmits(['uploaded'])
+const filesLoading = useStoreFilesLoading()
 
 function onInputChange(e) {
   addFiles(e.target.files)
@@ -12,6 +14,7 @@ function onInputChange(e) {
 }
 
 async function handleUploadFiles() {
+  filesLoading.value = true
   await uploadFiles(files.value)
   emit('uploaded')
 }
@@ -43,10 +46,26 @@ async function handleUploadFiles() {
     <Icon name="material-symbols:upload" size="24"/>
     Upload
   </UIBtn>
+
+  <Transition>
+    <div v-if="filesLoading" class="bg-white fixed inset-0 flex items-center justify-center">
+      <UILoaderSections class="w-[300px]"/>
+    </div>
+  </Transition>
 </div>
 </template>
 
 <style scoped lang="scss">
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.2s ease-in;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
+
 
 .drop-area {
   width: 100%;
