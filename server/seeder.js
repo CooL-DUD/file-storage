@@ -129,7 +129,7 @@ async function seedDB() {
         // make a bunch of time series data
         let usersSeederData = [];
 
-        for (let i = 0; i < 1; i++) {
+        for (let i = 0; i < 100; i++) {
             const userData = {
                     email: faker.internet.email().toLowerCase(),
                     first_name: faker.person.firstName(),
@@ -161,7 +161,7 @@ async function seedDB() {
         let lastFileHash = lastFile?.hash || '0'
 
         for (const key in data.insertedIds) {
-            let userFiles = getRandomElements(availableFiles, 1)
+            let userFiles = getRandomElements(availableFiles, getRandomNumber())
 
             userFiles.forEach(file => {
                 file = storeInBlockchain({user_id: data.insertedIds[key].toString(), ...file}, lastFileHash)
@@ -184,4 +184,8 @@ seedDB();
 function getRandomElements(arr, num) {
     const shuffled = [...arr].sort(() => 0.5 - Math.random());
     return shuffled.slice(0, num);
+}
+
+function getRandomNumber() {
+    return Math.floor(Math.random() * 3) + 1;
 }
