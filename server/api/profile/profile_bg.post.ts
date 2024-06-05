@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
     const headers = await getRequestHeaders(event)
     const token = headers?.authorization?.split(' ')[1]
     const verifiedToken = verifyToken(token)
-    const url = 'http://file-sandyq.kz/storage/profile_bgs/';
+    const url = 'http://localhost:3000/storage/profile_bgs/';
     if (!verifiedToken.error) {
         const avatarExtension = getFileExtensionFromBase64(body.profile_bg)
         const avatarName = verifiedToken.data.user_id.toString() + '.' + avatarExtension
