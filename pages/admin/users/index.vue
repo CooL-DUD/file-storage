@@ -3,15 +3,20 @@ import {useHeaders} from "~/composables/session/useHeaders";
 
 const users = ref([])
 
-async function getUsers() {
+const usersTotalPage = ref(0)
+const usersPage = ref(1)
+
+async function getUsers(page = 1) {
+  usersPage.value = page
  try {
-   const response = await $fetch('/api/users', {
+   const response = await $fetch(`/api/users?page=${usersPage.value}`, {
      method: 'GET',
      headers: useHeaders()
    });
 
    if (response.statusCode === 200) {
      users.value = response.data
+     usersTotalPage.value = response.pagination.totalPages
    }
  } catch (e) {
    console.log(e)
@@ -49,7 +54,7 @@ getUsers()
           :key="user._id"
           @click="$router.push(`/admin/users/${user._id}`)"
       >
-        <td>{{index + 1}}</td>
+        <td>{{usersPage > 1 ? (usersPage - 1) * 10 + index + 1 : index + 1}} {{usersPage > 1}}</td>
         <td>
           <div v-if="user.avatar" class="flex items-center justify-center h-[50px] w-[50px] rounded-full overflow-hidden mx-auto">
             <img :src="user.avatar" alt="">
@@ -65,6 +70,12 @@ getUsers()
       </tr>
       </tbody>
     </table>
+    <UIPagination
+        :total-pages="usersTotalPage"
+        :current-page="usersPage"
+        @new-page="getUsers"
+        class="mt-4"
+    />
   </div>
 </template>
 

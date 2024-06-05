@@ -52,4 +52,14 @@
     .modal {
         @apply fixed top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%] z-[100] white-bg w-full container p-5 rounded-3xl
     }
+
+    .pagination {
+        @apply rounded-lg overflow-hidden border border-gray-400 flex w-fit
+    }
+    .pagination-btn {
+        @apply w-9 h-9 flex items-center first:border-none border-l border-gray-600 justify-center disabled:bg-gray-300
+    }
+    .pagination-btn.active {
+        @apply primary-bg text-white
+    }
 }
