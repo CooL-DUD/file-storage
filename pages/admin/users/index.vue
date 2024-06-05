@@ -54,7 +54,7 @@ getUsers()
           :key="user._id"
           @click="$router.push(`/admin/users/${user._id}`)"
       >
-        <td>{{usersPage > 1 ? (usersPage - 1) * 10 + index + 1 : index + 1}} {{usersPage > 1}}</td>
+        <td>{{usersPage > 1 ? (usersPage - 1) * 10 + index + 1 : index + 1}}</td>
         <td>
           <div v-if="user.avatar" class="flex items-center justify-center h-[50px] w-[50px] rounded-full overflow-hidden mx-auto">
             <img :src="user.avatar" alt="">
