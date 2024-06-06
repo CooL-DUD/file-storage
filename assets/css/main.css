@@ -10,6 +10,9 @@ body {
 .primary-bg {
     background: #1d4ed8;
 }
+.primary-border {
+    border-color: #1d4ed8;
+}
 .secondary-gray-bg {
     background: #e5e7eb;
 }
@@ -52,6 +55,9 @@ body.dark-mode .primary-color {
 }
 body.dark-mode .primary-bg {
     background: #0f172a;
+}
+body.dark-mode .primary-border {
+    border-color: #0f172a;
 }
 body.dark-mode .white-bg {
     background: #1e293b;
