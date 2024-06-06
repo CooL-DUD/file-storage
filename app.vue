@@ -6,7 +6,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import {useGUN} from "~/composables/useGUN";
+// import {useGUN} from "~/composables/useGUN";
 
-useGUN()
+// useGUN()
 </script>
