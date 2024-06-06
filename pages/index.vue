@@ -47,7 +47,7 @@ async function getFiles() {
     headers: useHeaders()
   })
   if (response.statusCode === 200) {
-    files.value = response.data
+    files.value = response.data.reverse()
   }
 }
 
